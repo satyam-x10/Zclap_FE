@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-
+import ConversationTable from './components/ConversationTable';
 function App() {
   
 
@@ -38,6 +38,7 @@ function App() {
   return (
     <div>
       <h1>EcoSmart Marketing Generator</h1>
+      <ConversationTable/>
     </div>
   );
 }
