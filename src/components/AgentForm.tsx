@@ -276,7 +276,7 @@ const AgentsForm = ({ agents, setAgents }) => {
       )}
 
       <div style={{ marginTop: "16px" }}>
-        <label
+        {/* <label
           style={{
             display: "block",
             marginBottom: "8px",
@@ -285,9 +285,9 @@ const AgentsForm = ({ agents, setAgents }) => {
           }}
         >
           Add a New Role
-        </label>
+        </label> */}
 
-        <div
+        {/* <div
           style={{
             position: "relative",
             marginBottom: "16px",
@@ -411,7 +411,7 @@ const AgentsForm = ({ agents, setAgents }) => {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
         <div
           style={{

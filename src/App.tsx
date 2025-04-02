@@ -176,7 +176,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: "100px" }}>
       {data ? (
         <ConversationTable
           data={data}
@@ -198,12 +198,12 @@ function App() {
             }}
           >
             <div
-              style={{ width: "40%", maxHeight: "75vh", overflowY: "scroll" }}
+              style={{ width: "40%", maxHeight: "65vh",minHeight:'65vh', overflowY: "scroll" }}
             >
               <ProductForm product={product} setProduct={setProduct} />
             </div>
             <div
-              style={{ width: "60%", maxHeight: "75vh", overflowY: "scroll" }}
+              style={{ width: "60%", maxHeight: "65vh",minHeight:'65vh', overflowY: "scroll" }}
             >
               <AgentsForm agents={agents} setAgents={setAgents} />
             </div>
