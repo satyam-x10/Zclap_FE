@@ -385,7 +385,7 @@ const AgentsForm = ({ agents, setAgents }) => {
             No agents added yet.
           </span>
           <span style={{ marginLeft: "8px" }}>
-            Start by seklecting a role below.
+            Start by seklecting a role above.
           </span>
         </div>
       )}

@@ -6,7 +6,6 @@ import AgentsForm from "./components/AgentForm";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-
 function App() {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState({
@@ -133,9 +132,8 @@ function App() {
   const [data, setData] = useState(null);
 
   const [agents, setAgents] = useState([]);
-  const [summary, setSummary] = useState(null)
+  const [summary, setSummary] = useState(null);
   const handleGenerateContent = async () => {
-
     // setData(data1);
     // return
     if (
@@ -168,9 +166,9 @@ function App() {
       const conversation = conversationObj.both.conversation;
       console.log("Response from backend:", conversationObj);
       setData(conversation);
-      setSummary(conversationObj.both.summary)
+      setSummary(conversationObj.both.summary);
       console.log("Summary from backend:", conversationObj.summary);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -182,14 +180,24 @@ function App() {
   };
 
   return (
-    <div style={{ marginTop: "100px",width: "100vw",padding: "10px",boxSizing: "border-box" }}>
+    <div
+      style={{
+        marginTop: "100px",
+        width: "100vw",
+        padding: "10px",
+        boxSizing: "border-box",
+      }}
+    >
       {data ? (
-        <ConversationTable
-          data={data}
-          summary={summary}
-        />
+        <ConversationTable data={data} summary={summary} />
       ) : (
         <div>
+          <>
+          <div style={{ fontSize: "22px", fontWeight: "bold", textAlign: "left",marginLeft: "30px"}}>
+  Please make sure that you have filled product and agents data carefully.
+</div>
+
+          </>
           <div
             style={{
               display: "flex",
@@ -203,22 +211,28 @@ function App() {
             }}
           >
             <div
-              style={{ width: "40%", maxHeight: "65vh",minHeight:'65vh', overflowY: "scroll" }}
+              style={{
+                width: "40%",
+                maxHeight: "65vh",
+                minHeight: "65vh",
+                overflowY: "scroll",
+              }}
             >
               <ProductForm product={product} setProduct={setProduct} />
             </div>
             <div
-              style={{ width: "60%", maxHeight: "65vh",minHeight:'65vh', overflowY: "scroll" }}
+              style={{
+                width: "60%",
+                maxHeight: "65vh",
+                minHeight: "65vh",
+                overflowY: "scroll",
+              }}
             >
               <AgentsForm agents={agents} setAgents={setAgents} />
             </div>
             {/* <button onClick={handleGenerateContent}>
           Generate Content
         </button> */}
-          </div>
-          <div style={{ fontSize: "22px",position:'absolute',left:'10%',fontWeight:'bold' }}>
-            Please make sure that you have filled product and agents data
-            carefully .
           </div>
 
           <button
@@ -237,6 +251,7 @@ function App() {
               justifyContent: "center",
               maxWidth: "200px",
               // shift right
+              marginRight: "30px",
               marginLeft: "auto",
               marginTop: "20px",
               boxSizing: "border-box",
