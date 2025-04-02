@@ -11,18 +11,18 @@ const availableRoles = [
   "Data Analyst"
 ];
 
-const availableModels = ["gemini", "groq", "gpt-4", "claude"];
+const availableModels = [ "gemma2-9b-it" , "llama-3.3-70b-versatile" ,"deepseek-r1-distill-llama-70b" ,"qwen-qwq-32b","gemini-2.0-flash"];
 
 const modelColors = {
-  "gemini": "#4285F4", // Google blue
-  "groq": "#00A67E",   // Teal green
-  "gpt-4": "#10A37F",  // OpenAI green
-  "claude": "#6B46C1"  // Purple for Claude
+  "gemma2-9b-it": "#4285F4", // Google blue
+  "llama-3.3-70b-versatile": "#EA4335", // Google red
+  "deepseek-r1-distill-llama-70b": "#10A37F",  // OpenAI green
+  "qwen-qwq-32b": "#6B46C1",  // Purple for Claude
+  "gemini-2.0-flash": "#FBBF24", // Yellow for Gemini
 };
 
-const AgentsForm = () => {
-  const [agents, setAgents] = useState([]);
-  const [selectedModel, setSelectedModel] = useState("gemini");
+const AgentsForm = ({agents,setAgents}) => {
+  const [selectedModel, setSelectedModel] = useState("gemma2-9b-it");
   const [search, setSearch] = useState("");
   const [filteredRoles, setFilteredRoles] = useState(availableRoles);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -64,13 +64,15 @@ const AgentsForm = () => {
     <div style={{
       backgroundColor: '#121212',
       color: '#f5f5f5',
-      padding: '24px',
+      padding: '5px',
       borderRadius: '12px',
       maxWidth: '600px',
-      margin: 'auto',
+      margin: '5px',
       fontFamily: '"Inter", sans-serif',
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-      border: '1px solid rgba(255, 255, 255, 0.08)'
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      minHeight:'60vh'
+
     }}>
       <h2 style={{ 
         fontSize: '24px', 

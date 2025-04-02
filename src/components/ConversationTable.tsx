@@ -1,718 +1,513 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState } from "react";
 
-// Define CSS styles
+// Clean CSS styles without Tailwind
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    padding: '20px',
-    backgroundColor: '#f8f9fa',
-    fontFamily: 'Arial, sans-serif',
-    minHeight: '100vh',
-    boxSizing: 'border-box'
-  },
-  card: {
-    width: '100%',
-    maxWidth: '1000px',
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-    padding: '24px',
-    marginBottom: '24px'
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+    margin: "5px",
+    padding: "5px",
+    backgroundColor: "#111",
+    color: "white",
+    minHeight: "100vh",
+    boxSizing: "border-box",
+    width: "100%",
   },
   header: {
-    textAlign: 'center',
-    marginBottom: '24px'
+    backgroundColor: "#1a1a1a",
+    borderRadius: "8px",
+    padding: "20px",
+    marginBottom: "20px",
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.4)",
   },
-  title: {
-    fontSize: '28px',
-    fontWeight: 'bold',
-    color: '#2e3d49',
-    marginBottom: '8px'
+  headerTitle: {
+    fontSize: "24px",
+    fontWeight: "600",
+    color: "#fff",
+    margin: "0 0 8px 0",
   },
-  subtitle: {
-    fontSize: '16px',
-    color: '#6c757d',
-    marginBottom: '24px'
+  headerSubtitle: {
+    fontSize: "14px",
+    color: "#9ca3af",
+    margin: 0,
   },
-  conversationArea: {
-    position: 'relative',
-    width: '100%',
-    height: '450px',
-    marginBottom: '32px'
+  conversationWrapper: {
+    display: "flex",
+    gap: "20px",
   },
-  table: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '250px',
-    height: '250px',
-    backgroundColor: 'linear-gradient(to right, #e6f7ee, #e6f1ff)',
-    borderRadius: '50%',
-    border: '4px solid #e6ffe6',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-    zIndex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+  sidebar: {
+    width: "250px",
+    flexShrink: 0,
   },
-  tableInner: {
-    width: '180px',
-    height: '180px',
-    backgroundColor: 'white',
-    borderRadius: '50%',
-    boxShadow: 'inset 0 2px 8px rgba(0, 0, 0, 0.1)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
+  teamPanel: {
+    backgroundColor: "#1a1a1a",
+    borderRadius: "8px",
+    padding: "16px",
+    marginBottom: "16px",
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.4)",
   },
-  tableIcon: {
-    fontSize: '24px',
-    marginBottom: '8px'
+  panelTitle: {
+    fontSize: "16px",
+    fontWeight: "600",
+    color: "#fff",
+    marginTop: 0,
+    marginBottom: "16px",
+    display: "flex",
+    alignItems: "center",
   },
-  tableText: {
-    fontWeight: 'bold',
-    color: '#22996d',
-    fontSize: '16px'
+  panelIcon: {
+    marginRight: "8px",
+    width: "18px",
+    height: "18px",
+    color: "#9ca3af",
   },
-  tableSubtext: {
-    fontSize: '12px',
-    color: '#6c757d'
+  memberList: {
+    listStyle: "none",
+    padding: 0,
+    margin: 0,
   },
-  characterBase: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    width: '80px',
-    height: '80px',
-    borderRadius: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    color: 'white',
-    fontWeight: 'bold',
-    zIndex: 10,
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-    border: '4px solid white'
+  memberItem: {
+    display: "flex",
+    alignItems: "center",
+    padding: "2px",
+    borderRadius: "6px",
+    marginBottom: "2px",
+    backgroundColor: "#222",
   },
-  characterLabel: {
-    position: 'absolute',
-    bottom: '-30px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    whiteSpace: 'nowrap',
-    fontSize: '14px',
-    fontWeight: 'bold',
-    color: '#333'
+  memberAvatar: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "16px",
+    color: "white",
+    marginRight: "12px",
+    flexShrink: 0,
   },
-  characterIcon: {
-    fontSize: '24px',
-    marginBottom: '4px'
+  memberInfo: {
+    overflow: "hidden",
   },
-  characterName: {
-    fontSize: '12px'
+  memberName: {
+    fontWeight: "500",
+    fontSize: "14px",
+    color: "#fff",
+    margin: "0 0 1px 0",
   },
-  characterLine: {
-    position: 'absolute',
-    top: '0',
-    left: '50%',
-    width: '2px',
-    height: '60px',
-    backgroundColor: '#ddd',
-    transform: 'translateX(-50%) translateY(-100%)'
+  memberRole: {
+    fontSize: "12px",
+    color: "#9ca3af",
+    margin: 0,
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
   },
-  speechBubble: {
-    position: 'absolute',
-    top: '10px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: '100%', 
-    maxWidth: '600px',
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    padding: '20px',
-    border: '1px solid #e6e6e6',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-    zIndex: 20
+  mainContent: {
+    flex: 1,
   },
-  speechTriangle: {
-    position: 'absolute',
-    bottom: '-10px',
-    left: '50%',
-    transform: 'translateX(-50%) rotate(45deg)',
-    width: '20px',
-    height: '20px',
-    backgroundColor: 'white',
-    borderRight: '1px solid #e6e6e6',
-    borderBottom: '1px solid #e6e6e6'
+  tabBar: {
+    display: "flex",
+    borderBottom: "1px solid #333",
+    marginBottom: "16px",
   },
-  speakerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '16px'
+  tab: {
+    padding: "12px 16px",
+    fontSize: "14px",
+    fontWeight: "500",
+    cursor: "pointer",
+    border: "none",
+    background: "none",
+    color: "#9ca3af",
   },
-  speakerAvatar: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    marginRight: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '20px'
+  activeTab: {
+    borderBottom: "2px solid #3b82f6",
+    color: "#3b82f6",
   },
-  speakerInfo: {
-    display: 'flex',
-    flexDirection: 'column'
+  messagesContainer: {
+    backgroundColor: "#1a1a1a",
+    borderRadius: "8px",
+    overflow: "hidden",
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.4)",
   },
-  speakerName: {
-    fontWeight: 'bold',
-    fontSize: '18px'
-  },
-  speakerModel: {
-    fontSize: '12px',
-    color: '#6c757d'
-  },
-  messageCounter: {
-    marginLeft: 'auto',
-    padding: '4px 10px',
-    borderRadius: '20px',
-    backgroundColor: '#f0f0f0',
-    fontSize: '12px',
-    fontWeight: 'medium',
-    color: '#333'
-  },
-  messageContent: {
-    overflowY: 'auto',
-    maxHeight: '200px',
-    lineHeight: '1.6',
-    color: '#333',
-    padding: '0 5px'
-  },
-  typingCursor: {
-    display: 'inline-block',
-    width: '8px',
-    height: '20px',
-    backgroundColor: '#555',
-    marginLeft: '4px',
-    animation: 'blink 1s infinite'
-  },
-  completionNotice: {
-    position: 'absolute',
-    top: '10px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: '100%',
-    maxWidth: '500px',
-    padding: '20px',
-    backgroundColor: '#e6f7ee',
-    color: '#2e7d32',
-    borderRadius: '8px',
-    textAlign: 'center',
-    border: '1px solid #c8e6c9',
-    zIndex: 20
-  },
-  completionTitle: {
-    fontSize: '20px',
-    marginBottom: '8px',
-    fontWeight: 'bold'
-  },
-  completionText: {
-    marginBottom: '16px'
-  },
-  restartButton: {
-    backgroundColor: '#2e7d32',
-    color: 'white',
-    border: 'none',
-    padding: '10px 16px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    transition: 'background-color 0.2s'
-  },
-  controlsWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '16px',
-    marginBottom: '24px'
-  },
-  buttonBase: {
-    padding: '10px 16px',
-    borderRadius: '8px',
-    border: 'none',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    transition: 'background-color 0.2s'
-  },
-  buttonDisabled: {
-    backgroundColor: '#e0e0e0',
-    color: '#9e9e9e',
-    cursor: 'not-allowed'
-  },
-  prevButton: {
-    backgroundColor: '#e0f2f1',
-    color: '#00796b'
-  },
-  nextButton: {
-    backgroundColor: '#e0f2f1',
-    color: '#00796b'
-  },
-  playButton: {
-    backgroundColor: '#e8f5e9',
-    color: '#388e3c'
-  },
-  pauseButton: {
-    backgroundColor: '#fff8e1',
-    color: '#ffa000'
-  },
-  progressBar: {
-    width: '100%',
-    height: '8px',
-    backgroundColor: '#e0e0e0',
-    borderRadius: '4px',
-    marginBottom: '24px',
-    overflow: 'hidden'
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#3f51b5',
-    borderRadius: '4px',
-    transition: 'width 0.3s ease-in-out'
-  },
-  transcriptWrapper: {
-    width: '100%',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '12px',
-    border: '1px solid #e9ecef',
-    padding: '24px'
-  },
-  transcriptHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '20px',
-    fontWeight: 'bold',
-    marginBottom: '16px',
-    color: '#333'
-  },
-  transcriptIcon: {
-    marginRight: '8px'
-  },
-  transcriptMessages: {
-    maxHeight: '250px',
-    overflowY: 'auto',
-    paddingRight: '8px'
-  },
-  emptyTranscript: {
-    textAlign: 'center',
-    padding: '32px 0',
-    color: '#6c757d'
+  messageList: {
+    padding: "20px",
+    height: "500px",
+    overflowY: "auto",
   },
   messageItem: {
-    marginBottom: '24px'
-  },
-  messageHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '8px'
+    display: "flex",
+    marginBottom: "24px",
   },
   messageAvatar: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
-    marginRight: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+    fontSize: "16px",
+    flexShrink: 0,
+  },
+  messageContent: {
+    marginLeft: "16px",
+    flex: 1,
+  },
+  messageHeader: {
+    display: "flex",
+    alignItems: "baseline",
+    marginBottom: "6px",
   },
   messageName: {
-    fontWeight: 'bold'
+    fontWeight: "600",
+    fontSize: "15px",
+    color: "#fff",
+    margin: 0,
   },
   messageModel: {
-    marginLeft: '8px',
-    fontSize: '12px',
-    padding: '2px 8px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '20px'
+    marginLeft: "8px",
+    fontSize: "12px",
+    padding: "2px 8px",
+    backgroundColor: "#3b82f6",
+    borderRadius: "12px",
+    color: "white",
   },
-  messageBody: {
-    paddingLeft: '40px',
-    color: '#333'
+  messageText: {
+    fontSize: "14px",
+    lineHeight: "1.5",
+    color: "#d1d5db",
+    margin: 0,
   },
-  teamInfoWrapper: {
-    width: '100%',
-    maxWidth: '1000px',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '24px',
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)',
-    padding: '24px'
+  messageFooter: {
+    display: "flex",
+    alignItems: "center",
+    padding: "12px 20px",
+    backgroundColor: "#111",
+    borderTop: "1px solid #333",
   },
-  teamCard: {
-    paddingLeft: '16px',
-    borderLeftWidth: '4px',
-    borderLeftStyle: 'solid'
+  messageCount: {
+    fontSize: "13px",
+    color: "#9ca3af",
+    marginRight: "auto",
   },
-  teamHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    marginBottom: '8px'
+  buttonGroup: {
+    display: "flex",
+    gap: "8px",
   },
-  teamIcon: {
-    marginRight: '8px'
+  buttonPrimary: {
+    backgroundColor: "#3b82f6",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    padding: "8px 16px",
+    fontSize: "14px",
+    fontWeight: "500",
+    cursor: "pointer",
   },
-  teamDescription: {
-    fontSize: '14px',
-    color: '#6c757d',
-    lineHeight: '1.6'
+  buttonSecondary: {
+    backgroundColor: "#222",
+    color: "#e5e7eb",
+    border: "1px solid #444",
+    borderRadius: "6px",
+    padding: "8px 16px",
+    fontSize: "14px",
+    fontWeight: "500",
+    cursor: "pointer",
   },
-  '@keyframes blink': {
-    '0%': { opacity: 1 },
-    '50%': { opacity: 0 },
-    '100%': { opacity: 1 }
-  }
+  summaryContainer: {
+    backgroundColor: "#1a1a1a",
+    borderRadius: "8px",
+    padding: "20px",
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.4)",
+  },
+  summaryTitle: {
+    fontSize: "18px",
+    fontWeight: "600",
+    color: "#fff",
+    margin: "0 0 16px 0",
+  },
+  summaryText: {
+    fontSize: "14px",
+    lineHeight: "1.6",
+    color: "#d1d5db",
+    margin: "0 0 20px 0",
+  },
+  keyPointsTitle: {
+    fontSize: "16px",
+    fontWeight: "600",
+    color: "#fff",
+    margin: "0 0 12px 0",
+  },
+  keyPointsList: {
+    margin: "0 0 0 20px",
+    padding: 0,
+    color: "#9ca3af",
+    fontSize: "14px",
+    lineHeight: "1.6",
+  },
+  keyPointsItem: {
+    marginBottom: "8px",
+  },
+  footer: {
+    textAlign: "center",
+    padding: "20px 0 0 0",
+    fontSize: "13px",
+    color: "#6b7280",
+  },
 };
 
-// Create global styles for keyframes
-const createGlobalStyle = () => {
-  if (typeof document !== 'undefined') {
-    const styleEl = document.createElement('style');
-    styleEl.textContent = `
-      @keyframes blink {
-        0% { opacity: 1; }
-        50% { opacity: 0; }
-        100% { opacity: 1; }
-      }
-    `;
-    document.head.appendChild(styleEl);
-    return () => document.head.removeChild(styleEl);
-  }
-};
-
-const ConversationTable = () => {
-  useEffect(() => {
-    const cleanup = createGlobalStyle();
-    return cleanup;
-  }, []);
-
-  const [currentSpeaker, setCurrentSpeaker] = useState(null);
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  const [isTyping, setIsTyping] = useState(false);
-  const [displayedText, setDisplayedText] = useState('');
-  const [conversations, setConversations] = useState([]);
-  const [autoPlay, setAutoPlay] = useState(true);
-  
-  // Define our conversation data
-  const data = [
-    {
-      "sno": 1,
-      "agent": "ContentWriter",
-      "message": "Team, we need to create a marketing campaign for the EcoSmart Home Hub product launch. Let's collaborate on ideas.",
-      "model": "gemini"
-    }
-  ];
+const ConversationUI = ({ data }) => {
+  const [activeTab, setActiveTab] = useState("conversation");
 
   // Get unique roles
-  const uniqueRoles = [...new Set(data.map(item => item.agent))];
-  
-  // Assign colors to different roles
-  const roleColors = {
-    "ContentWriter": "#22c55e", // Vibrant green
-    "GraphicDesigner": "#3b82f6", // Vibrant blue
-  };
+  const uniqueRoles = [...new Set(data.map((item) => item.agent))];
 
-  // Role avatars and descriptions
+  // Role colors, avatars, and descriptions
   const roleInfo = {
-    "ContentWriter": {
+    "Content Writer": {
+      color: "#10b981",
       avatar: "📝",
-      description: "Develops compelling copy and messaging strategies"
+      description: "Develops compelling copy and messaging strategies",
     },
-    "GraphicDesigner": {
+    "Graphic Designer": {
+      color: "#3b82f6",
       avatar: "🎨",
-      description: "Creates visual elements and design language"
-    }
+      description: "Creates visual elements and design language",
+    },
+    "SEO Specialist": {
+      color: "#fbbf24",
+      avatar: "🔍",
+      description: "Optimizes content for search engines",
+    },
+    "Marketing Strategist": {
+      color: "#9333ea",
+      avatar: "📈",
+      description: "Plans and executes marketing campaigns",
+    },
+    "Web Developer": {
+      color: "#ef4444",
+      avatar: "💻",
+      description: "Builds and maintains websites",
+    },
+    "Social Media Manager": {
+      color: "#f97316",
+      avatar: "📱",
+      description: "Manages social media platforms and engagement",
+    },
+    "UX Designer": {
+      color: "#6366f1",
+      avatar: "🖌️",
+      description: "Designs user experiences and interfaces",
+    },
+    "Data Analyst": {
+      color: "#4ade80",
+      avatar: "📊",
+      description: "Analyzes data to inform business decisions",
+    },
   };
 
-  // Function to calculate position around a table
-  const getPositionForCharacter = (index, total) => {
-    const angle = (index / total) * 2 * Math.PI;
-    const radius = 160; // Distance from center
-    const x = Math.cos(angle) * radius;
-    const y = Math.sin(angle) * radius;
-    
-    return {
-      transform: `translate(${x}px, ${y}px)`,
-      marginTop: '-45px',
-      marginLeft: '-45px',
-    };
-  };
-
-  // Function to animate typing text
-  useEffect(() => {
-    if (currentMessageIndex >= data.length || !autoPlay) return;
-    
-    const speakerIndex = uniqueRoles.indexOf(data[currentMessageIndex].agent);
-    setCurrentSpeaker(speakerIndex);
-    setIsTyping(true);
-    setDisplayedText('');
-    
-    const message = data[currentMessageIndex].message;
-    let charIndex = 0;
-    
-    const typingInterval = setInterval(() => {
-      if (charIndex < message.length) {
-        setDisplayedText(prev => prev + message.charAt(charIndex));
-        charIndex++;
-      } else {
-        clearInterval(typingInterval);
-        setIsTyping(false);
-        
-        // Add this message to conversation history
-        setConversations(prev => [
-          ...prev, 
-          {
-            agent: data[currentMessageIndex].agent,
-            message: message,
-            model: data[currentMessageIndex].model
-          }
-        ]);
-        
-        // Move to next message after a delay
-        setTimeout(() => {
-          setCurrentMessageIndex(prev => prev + 1);
-        }, 2000);
-      }
-    }, 15);
-    
-    return () => clearInterval(typingInterval);
-  }, [currentMessageIndex, autoPlay]);
-
-  // Process message to render markdown-like formatting
+  // Function to render formatted messages
   const renderFormattedText = (text) => {
     // Parse bold text
-    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    
+    let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
     // Parse italic text
-    formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    // Parse bullet points (simple)
-    formattedText = formattedText.replace(/^\s*\*\s+(.*?)$/gm, '<li>$1</li>');
-    formattedText = formattedText.replace(/<li>(.*?)<\/li>/g, '<ul style="list-style-type: disc; margin-left: 24px; margin-top: 8px; margin-bottom: 8px;">$&</ul>');
-    
+    formattedText = formattedText.replace(/\*(.*?)\*/g, "<em>$1</em>");
+
+    // Parse bullet points
+    formattedText = formattedText.replace(/^\s*\*\s+(.*?)$/gm, "<li>$1</li>");
+    formattedText = formattedText.replace(
+      /<li>(.*?)<\/li>/g,
+      '<ul style="margin-left: 20px; margin-top: 8px; margin-bottom: 8px;">$&</ul>'
+    );
+
     // Handle line breaks
-    formattedText = formattedText.replace(/\n\n/g, '<br/><br/>');
-    
+    formattedText = formattedText.replace(/\n\n/g, "<br/><br/>");
+
     return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
   };
 
-  // Manual navigation functions
-  const goToPrevious = () => {
-    if (currentMessageIndex > 0) {
-      setAutoPlay(false);
-      setCurrentMessageIndex(prev => prev - 1);
-      const prevMessage = data[currentMessageIndex - 1];
-      setDisplayedText(prevMessage.message);
-      setCurrentSpeaker(uniqueRoles.indexOf(prevMessage.agent));
-    }
-  };
+  const printRef = useRef(null);
 
-  const goToNext = () => {
-    if (currentMessageIndex < data.length) {
-      setAutoPlay(false);
-      if (currentMessageIndex === conversations.length) {
-        // Add current message to conversation if it's not there yet
-        setConversations(prev => [
-          ...prev, 
-          {
-            agent: data[currentMessageIndex].agent,
-            message: data[currentMessageIndex].message,
-            model: data[currentMessageIndex].model
-          }
-        ]);
-      }
-      setCurrentMessageIndex(prev => prev + 1);
-      if (currentMessageIndex + 1 < data.length) {
-        setDisplayedText('');
-        setTimeout(() => {
-          setDisplayedText(data[currentMessageIndex + 1].message);
-          setCurrentSpeaker(uniqueRoles.indexOf(data[currentMessageIndex + 1].agent));
-        }, 300);
-      }
-    }
+  const handlePrint = () => {
+    const printContents = printRef.current.innerHTML;
+    const win = window.open("", "", "width=900,height=700");
+    win.document.write(`
+      <html>
+        <head>
+          <title>Conversation Print</title>
+          <style>
+            body {
+              font-family: sans-serif;
+              padding: 20px;
+            }
+            h3 {
+              margin: 0;
+            }
+            .message {
+              margin-bottom: 16px;
+              display: flex;
+              gap: 12px;
+            }
+            .avatar {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              flex-shrink: 0;
+            }
+            .content {
+              flex: 1;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+        </body>
+      </html>
+    `);
+    win.document.close();
+    win.focus();
+    win.print();
+    win.close();
   };
 
   return (
     <div style={styles.container}>
-      <div style={styles.card}>
-        
-        {/* Main conversation area */}
-        <div style={styles.conversationArea}>
-          
-          {/* Characters around the table */}
-          {uniqueRoles.map((role, index) => {
-            const positionStyle = getPositionForCharacter(index, uniqueRoles.length);
-            const isCurrentSpeaker = currentSpeaker === index;
-            const characterStyle = {
-              ...styles.characterBase,
-              ...positionStyle,
-              backgroundColor: roleColors[role],
-              transform: `${positionStyle.transform} scale(${isCurrentSpeaker ? 1.15 : 1})`,
-              boxShadow: isCurrentSpeaker 
-                ? `0 0 30px ${roleColors[role]}` 
-                : styles.characterBase.boxShadow
-            };
-            
-            return (
-              <div key={index} style={characterStyle}>
-                <div style={styles.characterIcon}>{roleInfo[role]?.avatar}</div>
-                <div style={styles.characterName}>{role}</div>
-                <div style={styles.characterLabel}>{role}</div>
-                
-                {/* Connection line to speech bubble when speaking */}
-                {isCurrentSpeaker && currentMessageIndex < data.length && (
-                  <div style={styles.characterLine}></div>
-                )}
-              </div>
-            );
-          })}
-          
-          {/* Speech bubble */}
-          {currentMessageIndex < data.length && (
-            <div style={styles.speechBubble}>
-              <div style={styles.speechTriangle}></div>
-              
-              <div style={styles.speakerHeader}>
-                <div style={{
-                  ...styles.speakerAvatar,
-                  backgroundColor: roleColors[data[currentMessageIndex].agent]
-                }}>
-                  {roleInfo[data[currentMessageIndex].agent]?.avatar}
-                </div>
-                <div style={styles.speakerInfo}>
-                  <div style={styles.speakerName}>{data[currentMessageIndex].agent}</div>
-                  <div style={styles.speakerModel}>
-                    Powered by {data[currentMessageIndex].model}
-                  </div>
-                </div>
-                <div style={styles.messageCounter}>
-                  Message {currentMessageIndex + 1} of {data.length}
-                </div>
-              </div>
-              
-              <div style={styles.messageContent}>
-                {renderFormattedText(displayedText)}
-                {isTyping && <span style={styles.typingCursor}></span>}
-              </div>
-            </div>
-          )}
-          
-          {/* Completed indicator */}
-          {currentMessageIndex >= data.length && (
-            <div style={styles.completionNotice}>
-              
-              <button 
-                onClick={() => {
-                  setCurrentMessageIndex(0);
-                  setConversations([]);
-                  setAutoPlay(true);
-                }}
-                style={styles.restartButton}
+      {/* Header */}
+      <header style={styles.header}>
+        <h1 style={styles.headerTitle}>Team Conversation</h1>
+        <p style={styles.headerSubtitle}>
+          Collaborative discussion between team members
+        </p>
+      </header>
+
+      {/* Main content */}
+      <div style={styles.conversationWrapper}>
+        {/* Sidebar with team members */}
+        <aside style={styles.sidebar}>
+          <div style={styles.teamPanel}>
+            <h2 style={styles.panelTitle}>
+              <svg
+                style={styles.panelIcon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                Restart Conversation
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              Team Members
+            </h2>
+
+            <ul style={styles.memberList}>
+              {uniqueRoles.map((role) => (
+                <li key={role} style={styles.memberItem}>
+                  <div
+                    style={{
+                      ...styles.memberAvatar,
+                      backgroundColor: roleInfo[role]?.color,
+                    }}
+                  >
+                    {roleInfo[role]?.avatar}
+                  </div>
+                  <div style={styles.memberInfo}>
+                    <h3 style={styles.memberName}>{role}</h3>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+
+        {/* Main content area */}
+        <div style={styles.mainContent}>
+          {/* Tabs */}
+          <div style={styles.tabBar}>
+            <button
+              onClick={() => setActiveTab("conversation")}
+              style={{
+                ...styles.tab,
+                ...(activeTab === "conversation" ? styles.activeTab : {}),
+              }}
+            >
+              Conversation
+            </button>
+            <button
+              onClick={() => setActiveTab("summary")}
+              style={{
+                ...styles.tab,
+                ...(activeTab === "summary" ? styles.activeTab : {}),
+              }}
+            >
+              Summary
+            </button>
+          </div>
+          {/* Footer controls */}
+          <div style={styles.messageFooter}>
+            <span style={styles.messageCount}>{data.length} messages</span>
+            <div style={styles.buttonGroup}>
+              <button onClick={handlePrint} style={styles.buttonSecondary}>
+                Print Page
               </button>
+
+              <button onClick={()=>{
+                navigator.clipboard.writeText(printRef.current.innerText);
+                alert("Conversation copied to clipboard!");
+              }} style={styles.buttonPrimary}>Copy</button>
+            </div>
+          </div>
+
+          {/* Conversation tab */}
+          {activeTab === "conversation" && (
+            <div style={styles.messagesContainer}>
+              {/* Messages */}
+              <div  ref={printRef} style={styles.messageList}>
+                {data.map((message, index) => (
+                  <div key={index} style={styles.messageItem}>
+                    <div
+                      style={{
+                        ...styles.messageAvatar,
+                        backgroundColor: roleInfo[message.agent]?.color,
+                      }}
+                    >
+                      {roleInfo[message.agent]?.avatar}
+                    </div>
+                    <div style={styles.messageContent}>
+                      <div style={styles.messageHeader}>
+                        <h3 style={styles.messageName}>{message.agent}</h3>
+                        <span style={styles.messageModel}>{message.model}</span>
+                      </div>
+                      <div style={styles.messageText}>
+                        {renderFormattedText(message.message)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-        </div>
-        
-        {/* Controls */}
-        <div style={styles.controlsWrapper}>
-          <button 
-            onClick={goToPrevious}
-            disabled={currentMessageIndex === 0}
-            style={{
-              ...styles.buttonBase,
-              ...(currentMessageIndex === 0 ? styles.buttonDisabled : styles.prevButton)
-            }}
-          >
-            ← Previous
-          </button>
-          
-          <button 
-            onClick={() => setAutoPlay(!autoPlay)}
-            style={{
-              ...styles.buttonBase,
-              ...(autoPlay ? styles.pauseButton : styles.playButton)
-            }}
-          >
-            {autoPlay ? 'Pause Auto-Play' : 'Resume Auto-Play'}
-          </button>
-          
-          <button 
-            onClick={goToNext}
-            disabled={currentMessageIndex >= data.length}
-            style={{
-              ...styles.buttonBase,
-              ...(currentMessageIndex >= data.length ? styles.buttonDisabled : styles.nextButton)
-            }}
-          >
-            Next →
-          </button>
-        </div>
-        
-      
-        {/* Conversation transcript */}
-        <div style={styles.transcriptWrapper}>
-          <h3 style={styles.transcriptHeader}>
-            <svg style={styles.transcriptIcon} width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
-            Conversation Transcript
-          </h3>
-          
-          <div style={styles.transcriptMessages}>
-            {conversations.length === 0 ? (
-              <div style={styles.emptyTranscript}>
-                Conversation will appear here as it progresses
-              </div>
-            ) : (
-              conversations.map((item, index) => (
-                <div key={index} style={styles.messageItem}>
-                  <div style={styles.messageHeader}>
-                    <div style={{
-                      ...styles.messageAvatar,
-                      backgroundColor: roleColors[item.agent]
-                    }}>
-                      {roleInfo[item.agent]?.avatar}
-                    </div>
-                    <div style={styles.messageName}>{item.agent}</div>
-                    <div style={styles.messageModel}>
-                      {item.model}
-                    </div>
-                  </div>
-                  <div style={styles.messageBody}>
-                    {renderFormattedText(item.message)}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+
+          {/* Summary tab */}
+          {activeTab === "summary" && (
+            <div style={styles.summaryContainer}>
+              <h2 style={styles.summaryTitle}>Conversation Summary</h2>
+              <p style={styles.summaryText}>
+                This is a conversation between {uniqueRoles.join(" and ")}{" "}
+                discussing project collaboration.
+              </p>
+
+            </div>
+          )}
         </div>
       </div>
-      
     </div>
   );
 };
 
-export default ConversationTable;
+export default ConversationUI;
