@@ -271,6 +271,16 @@ const ConversationUI = ({ data,summary }) => {
 
   // Role colors, avatars, descriptions, and voice settings
   const roleInfo = {
+    "default": {
+      color: "#9ca3af",
+      avatar: "🙍🏻‍♂️",
+      description: "Default role with no specific function",
+      voice: {
+        voiceIndex: 5,
+        pitch: 1,
+        rate: 1,
+      },
+    },
     "Content Writer": {
       color: "#10b981",
       avatar: "📝",
@@ -405,7 +415,14 @@ const ConversationUI = ({ data,summary }) => {
 
     // Assign voice based on role
     if (voices.length > 0) {
+      console.log("role", role);
+      console.log("voices", voices);
+      if (!roleInfo[role]) {
+        role = "default"; // Fallback to default if role is not recognized
+      }
       const voiceInfo = roleInfo[role].voice;
+      console.log("voiceInfo", voiceInfo);
+      
       const voiceIndex = voiceInfo.voiceIndex % voices.length;
       utterance.voice = voices[voiceIndex];
       utterance.pitch = voiceInfo.pitch;
@@ -608,7 +625,7 @@ const ConversationUI = ({ data,summary }) => {
                   <div
                     style={{
                       ...styles.memberAvatar,
-                      backgroundColor: roleInfo[role]?.color,
+                      backgroundColor: roleInfo[role]?.color??"#9ca3af",
                       opacity:
                         currentSpeakingIndex >= 0 &&
                         data[currentSpeakingIndex]?.agent === role
@@ -616,7 +633,7 @@ const ConversationUI = ({ data,summary }) => {
                           : 0.7,
                     }}
                   >
-                    {roleInfo[role]?.avatar}
+                    {roleInfo[role]?.avatar??'🙍🏻‍♂️'}
                   </div>
                   <div style={styles.memberInfo}>
                     <h3 style={styles.memberName}>{role}</h3>
@@ -773,7 +790,7 @@ const ConversationUI = ({ data,summary }) => {
                     <div
                       style={{
                         ...styles.messageAvatar,
-                        backgroundColor: roleInfo[message.agent]?.color,
+                        backgroundColor: roleInfo[message.agent]?.color??"#9ca3af",
                         transform:
                           currentSpeakingIndex === index
                             ? "scale(1.1)"
@@ -781,7 +798,7 @@ const ConversationUI = ({ data,summary }) => {
                         transition: "transform 0.3s ease",
                       }}
                     >
-                      {roleInfo[message.agent]?.avatar}
+                      {roleInfo[message.agent]?.avatar??'🙍🏻‍♂️'}
                     </div>
                     <div style={styles.messageContent}>
                       <div style={styles.messageHeader}>

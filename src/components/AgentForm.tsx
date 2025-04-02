@@ -37,8 +37,8 @@ const AgentsForm = ({ agents, setAgents }) => {
   useEffect(() => {
     setFilteredRoles(
       availableRoles.filter((role) =>
-        role.toLowerCase().includes(search.toLowerCase()),
-      ),
+        role.toLowerCase().includes(search.toLowerCase())
+      )
     );
   }, [search]);
 
@@ -47,6 +47,7 @@ const AgentsForm = ({ agents, setAgents }) => {
     updatedAgents[index].model = model;
     setAgents(updatedAgents);
   };
+  const [newRole, setNewRole] = useState("");
 
   const applyModelToAll = () => {
     setAgents(agents.map((agent) => ({ ...agent, model: selectedModel })));
@@ -85,7 +86,7 @@ const AgentsForm = ({ agents, setAgents }) => {
           fontSize: "34px",
           fontWeight: "700",
           marginBottom: "24px",
-          textAlign: "center",         
+          textAlign: "center",
           padding: "4px 0",
           marginBottom: "16px",
           color: "#ff9800",
@@ -103,7 +104,7 @@ const AgentsForm = ({ agents, setAgents }) => {
             color: "#aaa",
           }}
         >
-          Default Model for New Roles
+          Select default Model for agenta Role
         </label>
         <div
           style={{
@@ -438,6 +439,7 @@ const AgentsForm = ({ agents, setAgents }) => {
             flexWrap: "wrap",
             gap: "8px",
             marginTop: "12px",
+            alignItems: "center",
           }}
         >
           {availableRoles.map((role) => (
@@ -466,6 +468,56 @@ const AgentsForm = ({ agents, setAgents }) => {
               {role}
             </button>
           ))}
+
+          {/* Input + Add Custom Role Button */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              backgroundColor: "#1a1a1a",
+              padding: "6px 8px",
+              borderRadius: "6px",
+            }}
+          >
+            <input
+              type="text"
+              value={newRole}
+              onChange={(e) => setNewRole(e.target.value)}
+              placeholder="Add role"
+              style={{
+                padding: "6px",
+                borderRadius: "4px",
+                border: "1px solid #333",
+                backgroundColor: "#222",
+                color: "#eee",
+                fontSize: "16px",
+                outline: "none",
+                minWidth: "120px",
+              }}
+            />
+            <button
+              onClick={() => {
+                const role = newRole.trim();
+                if (role) {
+                  addAgent(role);
+                }
+                setNewRole("");
+              }}
+              style={{
+                backgroundColor: "beige",
+                color: "black",
+                padding: "6px 10px",
+                borderRadius: "4px",
+                fontWeight: "bold",
+                fontSize: "18px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
     </div>
