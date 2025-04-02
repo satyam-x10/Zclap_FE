@@ -3,6 +3,10 @@ import "./App.css";
 import ConversationTable from "./components/ConversationTable";
 import ProductForm from "./components/ProductForm";
 import AgentsForm from "./components/AgentForm";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 function App() {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState({
@@ -145,7 +149,7 @@ function App() {
     try {
       console.log("Sending data to backend:", { product, agents });
 
-      const response = await fetch("http://localhost:8000/generate", {
+      const response = await fetch(`${API_URL}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
