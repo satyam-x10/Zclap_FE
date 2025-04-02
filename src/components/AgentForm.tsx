@@ -475,7 +475,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                 >
                   <select
                     value={agent.model}
-                    onChange={(e) => handleModelChange(index, e.target.value)}
+                    onChange={(e) => handleModelChange(agents.length - 1 - index, e.target.value)}
                     style={{
                       padding: "6px 10px",
                       borderRadius: "6px",

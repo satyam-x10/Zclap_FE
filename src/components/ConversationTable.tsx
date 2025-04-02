@@ -527,7 +527,7 @@ const ConversationUI = ({ data,summary }) => {
               key={i}
               style={{
                 backgroundColor: highlightedWords.includes(i + 1)
-                  ? "#ffeb3b"
+                  ? "grey"
                   : "transparent",
                 padding: "0 2px",
                 transition: "background-color 0.2s ease",
