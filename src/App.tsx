@@ -216,7 +216,7 @@ function App() {
           Generate Content
         </button> */}
           </div>
-          <div style={{ fontSize: "18px",position:'absolute',left:'10%' }}>
+          <div style={{ fontSize: "22px",position:'absolute',left:'10%',fontWeight:'bold' }}>
             Please make sure that you have filled product and agents data
             carefully .
           </div>

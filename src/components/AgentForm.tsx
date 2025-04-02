@@ -89,7 +89,7 @@ const AgentsForm = ({ agents, setAgents }) => {
           textAlign: "center",
           padding: "4px 0",
           marginBottom: "16px",
-          color: "#ff9800",
+          color: "#22674a",
         }}
       >
         AI Team Builder
@@ -144,157 +144,6 @@ const AgentsForm = ({ agents, setAgents }) => {
           ))}
         </div>
       </div>
-
-      {agents.length === 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            fontSize: "18px",
-            color: "#aaa",
-          }}
-        >
-          <span style={{ fontSize: "24px", fontWeight: "600" }}>
-            No agents added yet.
-          </span>
-          <span style={{ marginLeft: "8px" }}>
-            Start by seklecting a role below.
-          </span>
-        </div>
-      )}
-
-      {agents.length > 0 && (
-        <div style={{ marginBottom: "24px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "12px",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "18px",
-                fontWeight: "600",
-                color: "#eee",
-              }}
-            >
-              Your Team ({agents.length})
-            </h3>
-            <button
-              onClick={applyModelToAll}
-              style={{
-                padding: "8px 12px",
-                backgroundColor: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(255, 255, 255, 0.12)",
-                color: "#fff",
-                borderRadius: "6px",
-                cursor: "pointer",
-                fontSize: "18px",
-                fontWeight: "500",
-                transition: "all 0.2s ease",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <span
-                style={{
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  backgroundColor: modelColors[selectedModel],
-                  display: "inline-block",
-                }}
-              ></span>
-              Apply {selectedModel} to all
-            </button>
-          </div>
-
-          <div
-            style={{
-              maxHeight: agents.length > 4 ? "300px" : "auto",
-              overflowY: agents.length > 4 ? "auto" : "visible",
-              paddingRight: agents.length > 4 ? "8px" : "0",
-            }}
-          >
-            {agents.map((agent, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "8px",
-                  padding: "12px 16px",
-                  backgroundColor: "rgba(255, 255, 255, 0.04)",
-                  borderRadius: "8px",
-                  border: "1px solid rgba(255, 255, 255, 0.06)",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                <span
-                  style={{
-                    flex: "1",
-                    fontSize: "18px",
-                    fontWeight: "500",
-                  }}
-                >
-                  {agent.role}
-                </span>
-
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
-                  <select
-                    value={agent.model}
-                    onChange={(e) => handleModelChange(index, e.target.value)}
-                    style={{
-                      padding: "6px 10px",
-                      borderRadius: "6px",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                      fontSize: "18px",
-                      backgroundColor: "rgba(0, 0, 0, 0.2)",
-                      color: modelColors[agent.model],
-                      backgroundColor: "black",
-                      cursor: "pointer",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {availableModels.map((model) => (
-                      <option key={model} value={model}>
-                        {model}
-                      </option>
-                    ))}
-                  </select>
-
-                  <button
-                    onClick={() => removeAgent(index)}
-                    style={{
-                      width: "28px",
-                      height: "28px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: "6px",
-                      border: "none",
-                      backgroundColor: "rgba(255, 69, 58, 0.1)",
-                      color: "#ff4545",
-                      cursor: "pointer",
-                      fontSize: "18px",
-                    }}
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       <div style={{ marginTop: "16px" }}>
         {/* <label
           style={{
@@ -520,6 +369,158 @@ const AgentsForm = ({ agents, setAgents }) => {
           </div>
         </div>
       </div>
+      {agents.length === 0 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            fontSize: "18px",
+            color: "#aaa",
+            marginTop: "24px",
+          }}
+        >
+          <span style={{ fontSize: "24px", fontWeight: "600" }}>
+            No agents added yet.
+          </span>
+          <span style={{ marginLeft: "8px" }}>
+            Start by seklecting a role below.
+          </span>
+        </div>
+      )}
+
+      {agents.length > 0 && (
+        <div style={{ marginBottom: "24px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "12px",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "18px",
+                fontWeight: "600",
+                color: "#eee",
+              }}
+            >
+              Your Team ({agents.length})
+            </h3>
+            <button
+              onClick={applyModelToAll}
+              style={{
+                padding: "8px 12px",
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#fff",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontSize: "18px",
+                fontWeight: "500",
+                transition: "all 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  backgroundColor: modelColors[selectedModel],
+                  display: "inline-block",
+                }}
+              ></span>
+              Apply {selectedModel} to all
+            </button>
+          </div>
+
+          <div
+            style={{
+              maxHeight: agents.length > 4 ? "300px" : "auto",
+              overflowY: agents.length > 4 ? "auto" : "visible",
+              paddingRight: agents.length > 4 ? "8px" : "0",
+            }}
+          >
+           {agents.slice().reverse().map((agent, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "8px",
+                  padding: "12px 16px",
+                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <span
+                  style={{
+                    flex: "1",
+                    fontSize: "18px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {agent.role}
+                </span>
+
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <select
+                    value={agent.model}
+                    onChange={(e) => handleModelChange(index, e.target.value)}
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      fontSize: "18px",
+                      backgroundColor: "rgba(0, 0, 0, 0.2)",
+                      color: modelColors[agent.model],
+                      backgroundColor: "black",
+                      cursor: "pointer",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {availableModels.map((model) => (
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button
+                    onClick={() => removeAgent(index)}
+                    style={{
+                      width: "28px",
+                      height: "28px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: "6px",
+                      border: "none",
+                      backgroundColor: "rgba(255, 69, 58, 0.1)",
+                      color: "#ff4545",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+     
     </div>
   );
 };

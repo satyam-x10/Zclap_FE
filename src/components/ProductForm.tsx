@@ -13,7 +13,7 @@ const ProductForm = ({ product, setProduct }) => {
   };
 
   const addKeyFeature = () => {
-    setProduct({ ...product, key_features: [...product.key_features, ""] });
+    setProduct({ ...product, key_features: ["", ...product.key_features] });
   };
 
   const deleteKeyFeature = (index) => {
@@ -25,18 +25,39 @@ const ProductForm = ({ product, setProduct }) => {
 
   return (
     <div
-      style={{
-        backgroundColor: "#222",
-        color: "#fff",
-        padding: "5px",
-        borderRadius: "10px",
-        margin: "5px ",
-        fontFamily: "Poppins, sans-serif",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-        overflowY: "hidden",
-        minHeight: "60vh",
-      }}
-    >
+  style={{
+    backgroundColor: "#222",
+    color: "#fff",
+    padding: "5px",
+    borderRadius: "10px",
+    margin: "5px ",
+    fontFamily: "Poppins, sans-serif",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+    overflowY: "auto",
+    minHeight: "60vh",
+    maxHeight: "80vh",
+
+    // Hiding scrollbar (inline for WebKit browsers)
+    scrollbarWidth: "none", // Firefox
+    msOverflowStyle: "none", // IE 10+
+  }}
+  ref={(el) => {
+    if (el) {
+      el.style.scrollbarWidth = "none"; // Firefox
+      el.style.msOverflowStyle = "none"; // IE/Edge
+      // WebKit scroll hiding
+      const style = document.createElement("style");
+      style.innerHTML = `
+        ::-webkit-scrollbar {
+          display: none;
+        }
+      `;
+      el.shadowRoot
+        ? el.shadowRoot.appendChild(style)
+        : document.head.appendChild(style);
+    }
+  }}
+>
       <h3
         style={{ textAlign: "center", fontSize: "28px", marginBottom: "10px" }}
       >
@@ -89,6 +110,26 @@ const ProductForm = ({ product, setProduct }) => {
           }}
         />
         <div>
+        <div style={{ textAlign: "right" }}>
+            <button
+              type="button"
+              onClick={addKeyFeature}
+              style={{
+                backgroundColor: "#ff9800",
+                color: "#fff",
+                border: "none",
+                padding: "8px",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontSize: "18px",
+                marginTop: "10px",
+                width: "40px",
+                marginBottom: "10px",
+              }}
+            >
+              +
+            </button>
+          </div>
           {product.key_features.map((feature, index) => (
             <div
               key={index}
@@ -131,25 +172,7 @@ const ProductForm = ({ product, setProduct }) => {
               </button>
             </div>
           ))}
-          <div style={{ textAlign: "right" }}>
-            <button
-              type="button"
-              onClick={addKeyFeature}
-              style={{
-                backgroundColor: "#ff9800",
-                color: "#fff",
-                border: "none",
-                padding: "8px",
-                borderRadius: "6px",
-                cursor: "pointer",
-                fontSize: "18px",
-                marginTop: "10px",
-                width: "40px",
-              }}
-            >
-              +
-            </button>
-          </div>
+          
         </div>
       </form>
     </div>
