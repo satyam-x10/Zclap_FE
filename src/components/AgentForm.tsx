@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const availableRoles = [
   "Content Writer",
@@ -8,20 +8,26 @@ const availableRoles = [
   "Web Developer",
   "Social Media Manager",
   "UX Designer",
-  "Data Analyst"
+  "Data Analyst",
 ];
 
-const availableModels = [ "gemma2-9b-it" , "llama-3.3-70b-versatile" ,"deepseek-r1-distill-llama-70b" ,"qwen-qwq-32b","gemini-2.0-flash"];
+const availableModels = [
+  "gemma2-9b-it",
+  "llama-3.3-70b-versatile",
+  "deepseek-r1-distill-llama-70b",
+  "qwen-qwq-32b",
+  "gemini-2.0-flash",
+];
 
 const modelColors = {
   "gemma2-9b-it": "#4285F4", // Google blue
   "llama-3.3-70b-versatile": "#EA4335", // Google red
-  "deepseek-r1-distill-llama-70b": "#10A37F",  // OpenAI green
-  "qwen-qwq-32b": "#6B46C1",  // Purple for Claude
+  "deepseek-r1-distill-llama-70b": "#10A37F", // OpenAI green
+  "qwen-qwq-32b": "#6B46C1", // Purple for Claude
   "gemini-2.0-flash": "#FBBF24", // Yellow for Gemini
 };
 
-const AgentsForm = ({agents,setAgents}) => {
+const AgentsForm = ({ agents, setAgents }) => {
   const [selectedModel, setSelectedModel] = useState("gemma2-9b-it");
   const [search, setSearch] = useState("");
   const [filteredRoles, setFilteredRoles] = useState(availableRoles);
@@ -30,9 +36,9 @@ const AgentsForm = ({agents,setAgents}) => {
 
   useEffect(() => {
     setFilteredRoles(
-      availableRoles.filter(role => 
-        role.toLowerCase().includes(search.toLowerCase())
-      )
+      availableRoles.filter((role) =>
+        role.toLowerCase().includes(search.toLowerCase()),
+      ),
     );
   }, [search]);
 
@@ -43,11 +49,11 @@ const AgentsForm = ({agents,setAgents}) => {
   };
 
   const applyModelToAll = () => {
-    setAgents(agents.map(agent => ({ ...agent, model: selectedModel })));
+    setAgents(agents.map((agent) => ({ ...agent, model: selectedModel })));
   };
 
   const addAgent = (role) => {
-    if (!agents.find(agent => agent.role === role)) {
+    if (!agents.find((agent) => agent.role === role)) {
       setAgents([...agents, { role, model: selectedModel }]);
       setSearch("");
       searchRef.current.focus();
@@ -61,67 +67,77 @@ const AgentsForm = ({agents,setAgents}) => {
   };
 
   return (
-    <div style={{
-      backgroundColor: '#121212',
-      color: '#f5f5f5',
-      padding: '5px',
-      borderRadius: '12px',
-      maxWidth: '600px',
-      margin: '5px',
-      fontFamily: '"Inter", sans-serif',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-      border: '1px solid rgba(255, 255, 255, 0.08)',
-      minHeight:'60vh'
-
-    }}>
-      <h2 style={{ 
-        fontSize: '24px', 
-        fontWeight: '700', 
-        marginBottom: '24px', 
-        textAlign: 'center',
-        background: 'linear-gradient(90deg, #4285F4, #6B46C1)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        padding: '4px 0'
-      }}>
+    <div
+      style={{
+        backgroundColor: "#121212",
+        color: "#f5f5f5",
+        padding: "5px",
+        borderRadius: "12px",
+        maxWidth: "600px",
+        margin: "5px",
+        fontFamily: '"Inter", sans-serif',
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+        border: "1px solid rgba(255, 255, 255, 0.08)",
+        minHeight: "60vh",
+      }}
+    >
+      <h2
+        style={{
+          fontSize: "24px",
+          fontWeight: "700",
+          marginBottom: "24px",
+          textAlign: "center",
+          background: "linear-gradient(90deg, #4285F4, #6B46C1)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          padding: "4px 0",
+        }}
+      >
         AI Team Builder
       </h2>
-      
-      <div style={{ marginBottom: '24px' }}>
-        <label style={{ 
-          display: 'block', 
-          marginBottom: '8px', 
-          fontSize: '14px',
-          color: '#aaa' 
-        }}>
+
+      <div style={{ marginBottom: "24px" }}>
+        <label
+          style={{
+            display: "block",
+            marginBottom: "8px",
+            fontSize: "14px",
+            color: "#aaa",
+          }}
+        >
           Default Model for New Roles
         </label>
-        <div style={{ 
-          display: 'flex', 
-          gap: '8px', 
-          flexWrap: 'wrap',
-          justifyContent: 'space-between'
-        }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
           {availableModels.map((model) => (
-            <button key={model} 
+            <button
+              key={model}
               onClick={() => setSelectedModel(model)}
               style={{
-                flex: '1',
-                minWidth: '70px',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                border: 'none',
-                fontSize: '14px',
-                fontWeight: '500',
-                backgroundColor: selectedModel === model 
-                  ? modelColors[model] 
-                  : 'rgba(255, 255, 255, 0.06)',
-                color: selectedModel === model ? '#fff' : '#ccc',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: selectedModel === model 
-                  ? `0 2px 8px ${modelColors[model]}40` 
-                  : 'none'
+                flex: "1",
+                minWidth: "70px",
+                padding: "10px 12px",
+                borderRadius: "8px",
+                border: "none",
+                fontSize: "14px",
+                fontWeight: "500",
+                backgroundColor:
+                  selectedModel === model
+                    ? modelColors[model]
+                    : "rgba(255, 255, 255, 0.06)",
+                color: selectedModel === model ? "#fff" : "#ccc",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                boxShadow:
+                  selectedModel === model
+                    ? `0 2px 8px ${modelColors[model]}40`
+                    : "none",
               }}
             >
               {model}
@@ -129,108 +145,125 @@ const AgentsForm = ({agents,setAgents}) => {
           ))}
         </div>
       </div>
-      
+
       {agents.length > 0 && (
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '12px'
-          }}>
-            <h3 style={{ 
-              fontSize: '16px', 
-              fontWeight: '600',
-              color: '#eee'
-            }}>
-              Your Team ({agents.length})
-            </h3>
-            <button 
-              onClick={applyModelToAll} 
+        <div style={{ marginBottom: "24px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "12px",
+            }}
+          >
+            <h3
               style={{
-                padding: '8px 12px',
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#fff',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: '500',
-                transition: 'all 0.2s ease',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
+                fontSize: "16px",
+                fontWeight: "600",
+                color: "#eee",
               }}
             >
-              <span style={{ 
-                width: '10px', 
-                height: '10px', 
-                borderRadius: '50%', 
-                backgroundColor: modelColors[selectedModel],
-                display: 'inline-block'
-              }}></span>
+              Your Team ({agents.length})
+            </h3>
+            <button
+              onClick={applyModelToAll}
+              style={{
+                padding: "8px 12px",
+                backgroundColor: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#fff",
+                borderRadius: "6px",
+                cursor: "pointer",
+                fontSize: "13px",
+                fontWeight: "500",
+                transition: "all 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <span
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "50%",
+                  backgroundColor: modelColors[selectedModel],
+                  display: "inline-block",
+                }}
+              ></span>
               Apply {selectedModel} to all
             </button>
           </div>
-          
-          <div style={{ 
-            maxHeight: agents.length > 4 ? '300px' : 'auto',
-            overflowY: agents.length > 4 ? 'auto' : 'visible',
-            paddingRight: agents.length > 4 ? '8px' : '0',
-          }}>
+
+          <div
+            style={{
+              maxHeight: agents.length > 4 ? "300px" : "auto",
+              overflowY: agents.length > 4 ? "auto" : "visible",
+              paddingRight: agents.length > 4 ? "8px" : "0",
+            }}
+          >
             {agents.map((agent, index) => (
-              <div key={index} style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                marginBottom: '8px', 
-                padding: '12px 16px', 
-                backgroundColor: 'rgba(255, 255, 255, 0.04)', 
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                transition: 'all 0.2s ease'
-              }}>
-                <span style={{ 
-                  flex: '1', 
-                  fontSize: '14px', 
-                  fontWeight: '500' 
-                }}>
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "8px",
+                  padding: "12px 16px",
+                  backgroundColor: "rgba(255, 255, 255, 0.04)",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(255, 255, 255, 0.06)",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <span
+                  style={{
+                    flex: "1",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
                   {agent.role}
                 </span>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
                   <select
                     value={agent.model}
                     onChange={(e) => handleModelChange(index, e.target.value)}
-                    style={{ 
-                      padding: '6px 10px', 
-                      borderRadius: '6px', 
-                      border: '1px solid rgba(255, 255, 255, 0.1)', 
-                      fontSize: '13px', 
-                      backgroundColor: 'rgba(0, 0, 0, 0.2)', 
+                    style={{
+                      padding: "6px 10px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      fontSize: "13px",
+                      backgroundColor: "rgba(0, 0, 0, 0.2)",
                       color: modelColors[agent.model],
-                      cursor: 'pointer',
-                      fontWeight: '500',
+                      cursor: "pointer",
+                      fontWeight: "500",
                     }}
                   >
                     {availableModels.map((model) => (
-                      <option key={model} value={model}>{model}</option>
+                      <option key={model} value={model}>
+                        {model}
+                      </option>
                     ))}
                   </select>
-                  
+
                   <button
                     onClick={() => removeAgent(index)}
                     style={{
-                      width: '28px',
-                      height: '28px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: '6px',
-                      border: 'none',
-                      backgroundColor: 'rgba(255, 69, 58, 0.1)',
-                      color: '#ff4545',
-                      cursor: 'pointer',
-                      fontSize: '14px'
+                      width: "28px",
+                      height: "28px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: "6px",
+                      border: "none",
+                      backgroundColor: "rgba(255, 69, 58, 0.1)",
+                      color: "#ff4545",
+                      cursor: "pointer",
+                      fontSize: "14px",
                     }}
                   >
                     ×
@@ -242,135 +275,173 @@ const AgentsForm = ({agents,setAgents}) => {
         </div>
       )}
 
-      <div style={{ marginTop: '16px' }}>
-        <label style={{ 
-          display: 'block', 
-          marginBottom: '8px', 
-          fontSize: '14px',
-          color: '#aaa'
-        }}>
+      <div style={{ marginTop: "16px" }}>
+        <label
+          style={{
+            display: "block",
+            marginBottom: "8px",
+            fontSize: "14px",
+            color: "#aaa",
+          }}
+        >
           Add a New Role
         </label>
-        
-        <div style={{ 
-          position: 'relative',
-          marginBottom: '16px'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-            borderRadius: '8px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            paddingLeft: '12px',
-            boxShadow: isSearchFocused ? '0 0 0 2px rgba(255, 255, 255, 0.1)' : 'none',
-            transition: 'box-shadow 0.2s ease'
-          }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.5 }}>
-              <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+
+        <div
+          style={{
+            position: "relative",
+            marginBottom: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "rgba(255, 255, 255, 0.04)",
+              borderRadius: "8px",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              paddingLeft: "12px",
+              boxShadow: isSearchFocused
+                ? "0 0 0 2px rgba(255, 255, 255, 0.1)"
+                : "none",
+              transition: "box-shadow 0.2s ease",
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ opacity: 0.5 }}
+            >
+              <path
+                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                stroke="#FFFFFF"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
-            <input 
+            <input
               ref={searchRef}
-              type="text" 
-              placeholder="Search available roles..." 
-              value={search} 
+              type="text"
+              placeholder="Search available roles..."
+              value={search}
               onChange={(e) => setSearch(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
               style={{
-                width: '100%',
-                padding: '12px',
-                backgroundColor: 'transparent',
-                color: '#fff',
-                fontSize: '14px',
-                border: 'none',
-                outline: 'none'
+                width: "100%",
+                padding: "12px",
+                backgroundColor: "transparent",
+                color: "#fff",
+                fontSize: "14px",
+                border: "none",
+                outline: "none",
               }}
             />
           </div>
-          
+
           {search && filteredRoles.length > 0 && (
-            <div style={{
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              right: 0,
-              backgroundColor: '#1e1e1e',
-              borderRadius: '8px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-              marginTop: '4px',
-              maxHeight: '200px',
-              overflowY: 'auto',
-              zIndex: 10,
-              border: '1px solid rgba(255, 255, 255, 0.08)'
-            }}>
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                backgroundColor: "#1e1e1e",
+                borderRadius: "8px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+                marginTop: "4px",
+                maxHeight: "200px",
+                overflowY: "auto",
+                zIndex: 10,
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+              }}
+            >
               {filteredRoles.map((role) => (
-                <div 
+                <div
                   key={role}
                   onClick={() => addAgent(role)}
                   style={{
-                    padding: '10px 12px',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    transition: 'background-color 0.2s ease',
-                    backgroundColor: agents.some(a => a.role === role) ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
-                    color: agents.some(a => a.role === role) ? '#888' : '#fff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
+                    padding: "10px 12px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    transition: "background-color 0.2s ease",
+                    backgroundColor: agents.some((a) => a.role === role)
+                      ? "rgba(255, 255, 255, 0.05)"
+                      : "transparent",
+                    color: agents.some((a) => a.role === role)
+                      ? "#888"
+                      : "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                   }}
                   onMouseEnter={(e) => {
-                    if (!agents.some(a => a.role === role)) {
-                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                    if (!agents.some((a) => a.role === role)) {
+                      e.currentTarget.style.backgroundColor =
+                        "rgba(255, 255, 255, 0.08)";
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (!agents.some(a => a.role === role)) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
+                    if (!agents.some((a) => a.role === role)) {
+                      e.currentTarget.style.backgroundColor = "transparent";
                     }
                   }}
                 >
                   {role}
-                  {agents.some(a => a.role === role) ? (
-                    <span style={{ fontSize: '12px', color: '#888' }}>Added</span>
+                  {agents.some((a) => a.role === role) ? (
+                    <span style={{ fontSize: "12px", color: "#888" }}>
+                      Added
+                    </span>
                   ) : (
-                    <span style={{ 
-                      width: '16px', 
-                      height: '16px', 
-                      borderRadius: '50%', 
-                      backgroundColor: modelColors[selectedModel],
-                      display: 'inline-block'
-                    }}></span>
+                    <span
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "50%",
+                        backgroundColor: modelColors[selectedModel],
+                        display: "inline-block",
+                      }}
+                    ></span>
                   )}
                 </div>
               ))}
             </div>
           )}
         </div>
-        
-        <div style={{ 
-          display: 'flex', 
-          flexWrap: 'wrap', 
-          gap: '8px',
-          marginTop: '12px'
-        }}>
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+            marginTop: "12px",
+          }}
+        >
           {availableRoles.map((role) => (
-            <button 
-              key={role} 
+            <button
+              key={role}
               onClick={() => addAgent(role)}
-              disabled={agents.some(agent => agent.role === role)}
+              disabled={agents.some((agent) => agent.role === role)}
               style={{
-                padding: '8px 12px',
-                borderRadius: '6px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                fontSize: '13px',
-                backgroundColor: agents.some(agent => agent.role === role) 
-                  ? 'rgba(255, 255, 255, 0.02)' 
-                  : 'rgba(255, 255, 255, 0.06)',
-                color: agents.some(agent => agent.role === role) ? '#666' : '#eee',
-                cursor: agents.some(agent => agent.role === role) ? 'default' : 'pointer',
-                transition: 'all 0.2s ease',
-                opacity: agents.some(agent => agent.role === role) ? 0.5 : 1
+                padding: "8px 12px",
+                borderRadius: "6px",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                fontSize: "13px",
+                backgroundColor: agents.some((agent) => agent.role === role)
+                  ? "rgba(255, 255, 255, 0.02)"
+                  : "rgba(255, 255, 255, 0.06)",
+                color: agents.some((agent) => agent.role === role)
+                  ? "#666"
+                  : "#eee",
+                cursor: agents.some((agent) => agent.role === role)
+                  ? "default"
+                  : "pointer",
+                transition: "all 0.2s ease",
+                opacity: agents.some((agent) => agent.role === role) ? 0.5 : 1,
               }}
             >
               {role}
@@ -382,4 +453,4 @@ const AgentsForm = ({agents,setAgents}) => {
   );
 };
 
-export default  AgentsForm ;
+export default AgentsForm;

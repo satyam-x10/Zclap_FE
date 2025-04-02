@@ -319,7 +319,7 @@ const ConversationUI = ({ data }) => {
     formattedText = formattedText.replace(/^\s*\*\s+(.*?)$/gm, "<li>$1</li>");
     formattedText = formattedText.replace(
       /<li>(.*?)<\/li>/g,
-      '<ul style="margin-left: 20px; margin-top: 8px; margin-bottom: 8px;">$&</ul>'
+      '<ul style="margin-left: 20px; margin-top: 8px; margin-bottom: 8px;">$&</ul>',
     );
 
     // Handle line breaks
@@ -456,10 +456,15 @@ const ConversationUI = ({ data }) => {
                 Print Page
               </button>
 
-              <button onClick={()=>{
-                navigator.clipboard.writeText(printRef.current.innerText);
-                alert("Conversation copied to clipboard!");
-              }} style={styles.buttonPrimary}>Copy</button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(printRef.current.innerText);
+                  alert("Conversation copied to clipboard!");
+                }}
+                style={styles.buttonPrimary}
+              >
+                Copy
+              </button>
             </div>
           </div>
 
@@ -467,7 +472,7 @@ const ConversationUI = ({ data }) => {
           {activeTab === "conversation" && (
             <div style={styles.messagesContainer}>
               {/* Messages */}
-              <div  ref={printRef} style={styles.messageList}>
+              <div ref={printRef} style={styles.messageList}>
                 {data.map((message, index) => (
                   <div key={index} style={styles.messageItem}>
                     <div
@@ -501,7 +506,6 @@ const ConversationUI = ({ data }) => {
                 This is a conversation between {uniqueRoles.join(" and ")}{" "}
                 discussing project collaboration.
               </p>
-
             </div>
           )}
         </div>

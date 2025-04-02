@@ -131,7 +131,12 @@ function App() {
   const [agents, setAgents] = useState([]);
 
   const handleGenerateContent = async () => {
-    if (loading ||agents.length==0||!product.name||!product.target_audience) {
+    if (
+      loading ||
+      agents.length == 0 ||
+      !product.name ||
+      !product.target_audience
+    ) {
       alert("Please fill in all fields and select at least one agent.");
       return;
     }
@@ -188,10 +193,14 @@ function App() {
               backgroundColor: "#000",
             }}
           >
-            <div style={{ width: "40%",maxHeight:'75vh',overflowY:'scroll' }}>
+            <div
+              style={{ width: "40%", maxHeight: "75vh", overflowY: "scroll" }}
+            >
               <ProductForm product={product} setProduct={setProduct} />
             </div>
-            <div style={{ width: "60%" ,maxHeight:'75vh',overflowY:'scroll'}}>
+            <div
+              style={{ width: "60%", maxHeight: "75vh", overflowY: "scroll" }}
+            >
               <AgentsForm agents={agents} setAgents={setAgents} />
             </div>
             {/* <button onClick={handleGenerateContent}>
@@ -199,7 +208,8 @@ function App() {
         </button> */}
           </div>
           <>
-          Please make sure that you have filled product and agents data carefully .  
+            Please make sure that you have filled product and agents data
+            carefully .
           </>
 
           <button
@@ -229,7 +239,7 @@ function App() {
                 style={{
                   width: "16px",
                   height: "16px",
-                  backgroundColor:"#007bff",
+                  backgroundColor: "#007bff",
                   border: "2px solid #fff",
                   borderTop: "2px solid transparent",
                   borderRadius: "50%",

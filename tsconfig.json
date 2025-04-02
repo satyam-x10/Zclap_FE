@@ -3,5 +3,19 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist/out-tsc",
+    "rootDir": ".",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "lib": ["es2017", "dom"]
+  }
 }

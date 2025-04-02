@@ -125,8 +125,7 @@ const ProductForm = ({ product, setProduct }) => {
                   borderRadius: "6px",
                   cursor: "pointer",
                   fontSize: "12px",
-                  width:'40px',
-                  
+                  width: "40px",
                 }}
               >
                 X

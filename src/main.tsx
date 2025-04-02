@@ -2,6 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -17,7 +19,8 @@ createRoot(document.getElementById("root")!).render(
           textDecoration: "none",
         }}
       >
-        <li onClick={() => window.location.reload()}
+        <li
+          onClick={() => window.location.reload()}
           style={{
             fontSize: "26px",
             fontWeight: "bold",
@@ -43,5 +46,5 @@ createRoot(document.getElementById("root")!).render(
       </ul>
     </div>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
