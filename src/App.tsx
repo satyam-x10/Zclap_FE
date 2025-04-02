@@ -133,7 +133,7 @@ function App() {
   const [data, setData] = useState(null);
 
   const [agents, setAgents] = useState([]);
-
+  const [summary, setSummary] = useState(null)
   const handleGenerateContent = async () => {
 
     // setData(data1);
@@ -165,9 +165,12 @@ function App() {
 
       const res = await response.json();
       const conversationObj = JSON.parse(res.content);
-      const conversation = conversationObj.conversation;
-      console.log("Response from backend:", conversation);
+      const conversation = conversationObj.both.conversation;
+      console.log("Response from backend:", conversationObj);
       setData(conversation);
+      setSummary(conversationObj.both.summary)
+      console.log("Summary from backend:", conversationObj.summary);
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -183,8 +186,7 @@ function App() {
       {data ? (
         <ConversationTable
           data={data}
-          loading={loading}
-          setLoading={setLoading}
+          summary={summary}
         />
       ) : (
         <div>

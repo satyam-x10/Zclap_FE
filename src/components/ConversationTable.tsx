@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 // Clean CSS styles without Tailwind
 const styles = {
@@ -257,75 +257,272 @@ const styles = {
   },
 };
 
-const ConversationUI = ({ data }) => {
+const ConversationUI = ({ data,summary }) => {
   const [activeTab, setActiveTab] = useState("conversation");
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [currentSpeakingIndex, setCurrentSpeakingIndex] = useState(-1);
+  const [highlightedWords, setHighlightedWords] = useState([]);
+
+  // Reference to store speech synthesis utterances
+  const utteranceRef = useRef(null);
 
   // Get unique roles
   const uniqueRoles = [...new Set(data.map((item) => item.agent))];
 
-  // Role colors, avatars, and descriptions
+  // Role colors, avatars, descriptions, and voice settings
   const roleInfo = {
     "Content Writer": {
       color: "#10b981",
       avatar: "📝",
       description: "Develops compelling copy and messaging strategies",
+      voice: {
+        voiceIndex: 0, // Will be assigned dynamically
+        pitch: 1,
+        rate: 1,
+      },
     },
     "Graphic Designer": {
       color: "#3b82f6",
       avatar: "🎨",
       description: "Creates visual elements and design language",
+      voice: {
+        voiceIndex: 1,
+        pitch: 1.1,
+        rate: 0.9,
+      },
     },
     "SEO Specialist": {
       color: "#fbbf24",
       avatar: "🔍",
       description: "Optimizes content for search engines",
+      voice: {
+        voiceIndex: 2,
+        pitch: 0.9,
+        rate: 1.1,
+      },
     },
     "Marketing Strategist": {
       color: "#9333ea",
       avatar: "📈",
       description: "Plans and executes marketing campaigns",
+      voice: {
+        voiceIndex: 3,
+        pitch: 1.2,
+        rate: 1,
+      },
     },
     "Web Developer": {
       color: "#ef4444",
       avatar: "💻",
       description: "Builds and maintains websites",
+      voice: {
+        voiceIndex: 4,
+        pitch: 0.8,
+        rate: 1.05,
+      },
     },
     "Social Media Manager": {
       color: "#f97316",
       avatar: "📱",
       description: "Manages social media platforms and engagement",
+      voice: {
+        voiceIndex: 5,
+        pitch: 1.1,
+        rate: 1.1,
+      },
     },
     "UX Designer": {
       color: "#6366f1",
       avatar: "🖌️",
       description: "Designs user experiences and interfaces",
+      voice: {
+        voiceIndex: 6,
+        pitch: 1,
+        rate: 0.95,
+      },
     },
     "Data Analyst": {
       color: "#4ade80",
       avatar: "📊",
       description: "Analyzes data to inform business decisions",
+      voice: {
+        voiceIndex: 7,
+        pitch: 0.9,
+        rate: 1,
+      },
     },
   };
 
-  // Function to render formatted messages
-  const renderFormattedText = (text) => {
-    // Parse bold text
-    let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  // Load available voices
+  useEffect(() => {
+    // Assign voices to roles once voices are loaded
+    const assignVoices = () => {
+      const availableVoices = window.speechSynthesis.getVoices();
+      if (availableVoices.length > 0) {
+        console.log("Voices loaded:", availableVoices.length);
+      }
+    };
 
-    // Parse italic text
-    formattedText = formattedText.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    // Firefox loads voices asynchronously
+    if (typeof speechSynthesis !== "undefined") {
+      speechSynthesis.onvoiceschanged = assignVoices;
 
-    // Parse bullet points
-    formattedText = formattedText.replace(/^\s*\*\s+(.*?)$/gm, "<li>$1</li>");
-    formattedText = formattedText.replace(
-      /<li>(.*?)<\/li>/g,
-      '<ul style="margin-left: 20px; margin-top: 8px; margin-bottom: 8px;">$&</ul>',
-    );
+      // Chrome might have voices already loaded
+      assignVoices();
 
-    // Handle line breaks
-    formattedText = formattedText.replace(/\n\n/g, "<br/><br/>");
+      // Cleanup
+      return () => {
+        speechSynthesis.onvoiceschanged = null;
+        if (utteranceRef.current) {
+          speechSynthesis.cancel();
+        }
+      };
+    }
+  }, []);
 
-    return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
+  // Function to remove formatting for speech
+  const stripFormatting = (text) => {
+    // Remove markdown formatting
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "$1")
+      .replace(/\*(.*?)\*/g, "$1")
+      .replace(/^\s*\*\s+(.*?)$/gm, "$1");
+  };
+
+  // Function to speak text with highlighting
+  const speakText = (text, role, messageIndex) => {
+    setCurrentSpeakingIndex(messageIndex);
+    setHighlightedWords([]);
+
+    const cleanText = stripFormatting(text);
+    const words = cleanText.split(/\s+/);
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utteranceRef.current = utterance;
+
+    // Get available voices
+    const voices = window.speechSynthesis.getVoices();
+
+    // Assign voice based on role
+    if (voices.length > 0) {
+      const voiceInfo = roleInfo[role].voice;
+      const voiceIndex = voiceInfo.voiceIndex % voices.length;
+      utterance.voice = voices[voiceIndex];
+      utterance.pitch = voiceInfo.pitch;
+      utterance.rate = voiceInfo.rate;
+    }
+
+    // Add emotion through pitch and rate variations
+    if (text.includes("!")) {
+      utterance.pitch += 0.2; // Excited
+      utterance.rate += 0.1;
+    } else if (text.includes("?")) {
+      utterance.pitch += 0.1; // Questioning
+    } else if (text.includes("...")) {
+      utterance.rate -= 0.1; // Thoughtful
+    }
+
+    // Word boundary event for highlighting
+    utterance.onboundary = (event) => {
+      if (event.name === "word") {
+        const wordPosition = event.charIndex;
+        const wordEnd = wordPosition + event.charLength;
+
+        // Find which word this corresponds to
+        let wordCount = 0;
+        let charCount = 0;
+
+        for (let i = 0; i < words.length; i++) {
+          charCount += words[i].length + 1; // +1 for space
+          if (wordPosition < charCount) {
+            wordCount = i + 1;
+            break;
+          }
+        }
+
+        setHighlightedWords((prev) => [...prev.slice(-5), wordCount]);
+      }
+    };
+
+    // When speech ends
+    utterance.onend = () => {
+      if (messageIndex < data.length - 1) {
+        setTimeout(() => {
+          speakText(
+            data[messageIndex + 1].message,
+            data[messageIndex + 1].agent,
+            messageIndex + 1
+          );
+        }, 800); // Pause between speakers
+      } else {
+        setIsSpeaking(false);
+        setCurrentSpeakingIndex(-1);
+        setHighlightedWords([]);
+        utteranceRef.current = null;
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Start or stop the conversation
+  const toggleConversation = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setCurrentSpeakingIndex(-1);
+      setHighlightedWords([]);
+      utteranceRef.current = null;
+    } else {
+      setIsSpeaking(true);
+      setActiveTab("conversation");
+      if (data.length > 0) {
+        speakText(data[0].message, data[0].agent, 0);
+      }
+    }
+  };
+
+  // Function to render formatted messages with highlighting
+  const renderFormattedText = (text, isCurrentlySpeaking, messageIndex) => {
+    if (!isCurrentlySpeaking) {
+      // Parse bold text
+      let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+      // Parse italic text
+      formattedText = formattedText.replace(/\*(.*?)\*/g, "<em>$1</em>");
+      // Parse bullet points
+      formattedText = formattedText.replace(/^\s*\*\s+(.*?)$/gm, "<li>$1</li>");
+      formattedText = formattedText.replace(
+        /<li>(.*?)<\/li>/g,
+        '<ul style="margin-left: 20px; margin-top: 8px; margin-bottom: 8px;">$&</ul>'
+      );
+      // Handle line breaks
+      formattedText = formattedText.replace(/\n\n/g, "<br/><br/>");
+      return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
+    } else {
+      // For the currently speaking message, highlight words as they're spoken
+      const cleanText = stripFormatting(text);
+      const words = cleanText.split(/\s+/);
+
+      return (
+        <div>
+          {words.map((word, i) => (
+            <span
+              key={i}
+              style={{
+                backgroundColor: highlightedWords.includes(i + 1)
+                  ? "#ffeb3b"
+                  : "transparent",
+                padding: "0 2px",
+                transition: "background-color 0.2s ease",
+                display: "inline-block",
+              }}
+            >
+              {word}{" "}
+            </span>
+          ))}
+        </div>
+      );
+    }
   };
 
   const printRef = useRef(null);
@@ -412,6 +609,11 @@ const ConversationUI = ({ data }) => {
                     style={{
                       ...styles.memberAvatar,
                       backgroundColor: roleInfo[role]?.color,
+                      opacity:
+                        currentSpeakingIndex >= 0 &&
+                        data[currentSpeakingIndex]?.agent === role
+                          ? 1
+                          : 0.7,
                     }}
                   >
                     {roleInfo[role]?.avatar}
@@ -452,6 +654,83 @@ const ConversationUI = ({ data }) => {
           <div style={styles.messageFooter}>
             <span style={styles.messageCount}>{data.length} messages</span>
             <div style={styles.buttonGroup}>
+              <button
+                type="button"
+                onClick={toggleConversation}
+                style={{
+                  backgroundColor: isSpeaking ? "#f44336" : "#ff9800",
+                  color: "#fff",
+                  border: "none",
+                  padding: "8px",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                {isSpeaking ? (
+                  <>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <rect x="6" y="4" width="4" height="16" />
+                      <rect x="14" y="4" width="4" height="16" />
+                    </svg>
+                    Stop
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <polygon points="5,3 19,12 5,21" />
+                    </svg>
+                    Start Conversation
+                  </>
+                )}
+              </button>
+              {isSpeaking && (
+                <button
+                  style={{
+                    backgroundColor: "green",
+                    color: "white",
+                    border: "none",
+                    padding: "8px",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    marginRight: "8px",
+                  }}
+                  onClick={() => {
+                    // Cancel current speech
+                    window.speechSynthesis.cancel();
+
+                    // Reset highlighting
+                    setHighlightedWords([]);
+
+                    // Move to next message if available
+                    if (currentSpeakingIndex < data.length - 1) {
+                      // Slight delay to ensure clean transition
+                      setTimeout(() => {
+                        speakText(
+                          data[currentSpeakingIndex + 1].message,
+                          data[currentSpeakingIndex + 1].agent,
+                          currentSpeakingIndex + 1
+                        );
+                      }, 100);
+                    }
+                  }}
+                >
+                  Next
+                </button>
+              )}
               <button onClick={handlePrint} style={styles.buttonSecondary}>
                 Print Page
               </button>
@@ -474,11 +753,32 @@ const ConversationUI = ({ data }) => {
               {/* Messages */}
               <div ref={printRef} style={styles.messageList}>
                 {data.map((message, index) => (
-                  <div key={index} style={styles.messageItem}>
+                  <div
+                    key={index}
+                    style={{
+                      ...styles.messageItem,
+                      backgroundColor:
+                        currentSpeakingIndex === index
+                          ? `${roleInfo[message.agent]?.color}10`
+                          : "transparent",
+                      borderLeft:
+                        currentSpeakingIndex === index
+                          ? `4px solid ${roleInfo[message.agent]?.color}`
+                          : "none",
+                      paddingLeft:
+                        currentSpeakingIndex === index ? "12px" : "16px",
+                      transition: "all 0.3s ease",
+                    }}
+                  >
                     <div
                       style={{
                         ...styles.messageAvatar,
                         backgroundColor: roleInfo[message.agent]?.color,
+                        transform:
+                          currentSpeakingIndex === index
+                            ? "scale(1.1)"
+                            : "scale(1)",
+                        transition: "transform 0.3s ease",
                       }}
                     >
                       {roleInfo[message.agent]?.avatar}
@@ -489,7 +789,11 @@ const ConversationUI = ({ data }) => {
                         <span style={styles.messageModel}>{message.model}</span>
                       </div>
                       <div style={styles.messageText}>
-                        {renderFormattedText(message.message)}
+                        {renderFormattedText(
+                          message.message,
+                          currentSpeakingIndex === index,
+                          index
+                        )}
                       </div>
                     </div>
                   </div>
@@ -506,6 +810,10 @@ const ConversationUI = ({ data }) => {
                 This is a conversation between {uniqueRoles.join(" and ")}{" "}
                 discussing project collaboration.
               </p>
+              <h3 style={styles.keyPointsTitle}>Key Points:</h3>
+              <ul style={styles.keyPointsList}>
+                {summary}
+              </ul>
             </div>
           )}
         </div>
