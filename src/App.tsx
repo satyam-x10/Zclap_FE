@@ -135,6 +135,9 @@ function App() {
   const [agents, setAgents] = useState([]);
 
   const handleGenerateContent = async () => {
+
+    setData(data1);
+    return
     if (
       loading ||
       agents.length == 0 ||
@@ -176,7 +179,7 @@ function App() {
   };
 
   return (
-    <div style={{ marginTop: "100px" }}>
+    <div style={{ marginTop: "100px",width: "100vw",padding: "10px",boxSizing: "border-box" }}>
       {data ? (
         <ConversationTable
           data={data}
@@ -184,12 +187,12 @@ function App() {
           setLoading={setLoading}
         />
       ) : (
-        <>
+        <div>
           <div
             style={{
               display: "flex",
               flexDirection: "row",
-              width: "100vw",
+              // width: "100vw",
               // height: '100%',
               gap: "20px",
               padding: "10px",
@@ -211,10 +214,10 @@ function App() {
           Generate Content
         </button> */}
           </div>
-          <>
+          <div style={{ fontSize: "18px",position:'absolute',left:'10%' }}>
             Please make sure that you have filled product and agents data
             carefully .
-          </>
+          </div>
 
           <button
             onClick={handleGenerateContent}
@@ -226,7 +229,7 @@ function App() {
               padding: "10px",
               borderRadius: "6px",
               cursor: "pointer",
-              fontSize: "14px",
+              fontSize: "18px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -263,7 +266,7 @@ function App() {
     }
   `}
           </style>
-        </>
+        </div>
       )}
     </div>
   );

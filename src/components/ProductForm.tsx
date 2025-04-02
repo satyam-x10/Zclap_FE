@@ -30,7 +30,6 @@ const ProductForm = ({ product, setProduct }) => {
         color: "#fff",
         padding: "5px",
         borderRadius: "10px",
-        maxWidth: "500px",
         margin: "5px ",
         fontFamily: "Poppins, sans-serif",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
@@ -39,7 +38,7 @@ const ProductForm = ({ product, setProduct }) => {
       }}
     >
       <h3
-        style={{ textAlign: "center", fontSize: "18px", marginBottom: "10px" }}
+        style={{ textAlign: "center", fontSize: "28px", marginBottom: "10px" }}
       >
         Product Form
       </h3>
@@ -55,7 +54,7 @@ const ProductForm = ({ product, setProduct }) => {
             padding: "8px",
             borderRadius: "6px",
             border: "none",
-            fontSize: "14px",
+            fontSize: "18px",
             boxSizing: "border-box",
           }}
         />
@@ -70,7 +69,7 @@ const ProductForm = ({ product, setProduct }) => {
             padding: "8px",
             borderRadius: "6px",
             border: "none",
-            fontSize: "14px",
+            fontSize: "18px",
             boxSizing: "border-box",
           }}
         />
@@ -85,7 +84,7 @@ const ProductForm = ({ product, setProduct }) => {
             padding: "8px",
             borderRadius: "6px",
             border: "none",
-            fontSize: "14px",
+            fontSize: "18px",
             boxSizing: "border-box",
           }}
         />
@@ -109,7 +108,7 @@ const ProductForm = ({ product, setProduct }) => {
                   padding: "6px",
                   borderRadius: "6px",
                   border: "none",
-                  fontSize: "14px",
+                  fontSize: "18px",
                   boxSizing: "border-box",
                 }}
               />
@@ -124,7 +123,7 @@ const ProductForm = ({ product, setProduct }) => {
                   padding: "6px 10px",
                   borderRadius: "6px",
                   cursor: "pointer",
-                  fontSize: "12px",
+                  fontSize: "18px",
                   width: "40px",
                 }}
               >
@@ -143,7 +142,7 @@ const ProductForm = ({ product, setProduct }) => {
                 padding: "8px",
                 borderRadius: "6px",
                 cursor: "pointer",
-                fontSize: "14px",
+                fontSize: "18px",
                 marginTop: "10px",
                 width: "40px",
               }}

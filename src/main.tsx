@@ -7,7 +7,7 @@ import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <div style={{ backgroundColor: "#000",position: "fixed", top: 0, left: 0, right: 0 }}>
+    <div style={{ backgroundColor: "#000" ,position: "fixed", top: 0, left: 0, right: 0 }}>
       <ul
         style={{
           display: "flex",

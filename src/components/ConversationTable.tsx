@@ -27,7 +27,7 @@ const styles = {
     margin: "0 0 8px 0",
   },
   headerSubtitle: {
-    fontSize: "14px",
+    fontSize: "18px",
     color: "#9ca3af",
     margin: 0,
   },
@@ -91,7 +91,7 @@ const styles = {
   },
   memberName: {
     fontWeight: "500",
-    fontSize: "14px",
+    fontSize: "18px",
     color: "#fff",
     margin: "0 0 1px 0",
   },
@@ -113,7 +113,7 @@ const styles = {
   },
   tab: {
     padding: "12px 16px",
-    fontSize: "14px",
+    fontSize: "18px",
     fontWeight: "500",
     cursor: "pointer",
     border: "none",
@@ -174,7 +174,7 @@ const styles = {
     color: "white",
   },
   messageText: {
-    fontSize: "14px",
+    fontSize: "18px",
     lineHeight: "1.5",
     color: "#d1d5db",
     margin: 0,
@@ -201,7 +201,7 @@ const styles = {
     border: "none",
     borderRadius: "6px",
     padding: "8px 16px",
-    fontSize: "14px",
+    fontSize: "18px",
     fontWeight: "500",
     cursor: "pointer",
   },
@@ -211,7 +211,7 @@ const styles = {
     border: "1px solid #444",
     borderRadius: "6px",
     padding: "8px 16px",
-    fontSize: "14px",
+    fontSize: "18px",
     fontWeight: "500",
     cursor: "pointer",
   },
@@ -228,7 +228,7 @@ const styles = {
     margin: "0 0 16px 0",
   },
   summaryText: {
-    fontSize: "14px",
+    fontSize: "18px",
     lineHeight: "1.6",
     color: "#d1d5db",
     margin: "0 0 20px 0",
@@ -243,7 +243,7 @@ const styles = {
     margin: "0 0 0 20px",
     padding: 0,
     color: "#9ca3af",
-    fontSize: "14px",
+    fontSize: "18px",
     lineHeight: "1.6",
   },
   keyPointsItem: {

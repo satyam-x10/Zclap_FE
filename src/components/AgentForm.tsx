@@ -73,7 +73,6 @@ const AgentsForm = ({ agents, setAgents }) => {
         color: "#f5f5f5",
         padding: "5px",
         borderRadius: "12px",
-        maxWidth: "600px",
         margin: "5px",
         fontFamily: '"Inter", sans-serif',
         boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
@@ -81,27 +80,26 @@ const AgentsForm = ({ agents, setAgents }) => {
         minHeight: "60vh",
       }}
     >
-      <h2
+      <div
         style={{
-          fontSize: "24px",
+          fontSize: "34px",
           fontWeight: "700",
           marginBottom: "24px",
-          textAlign: "center",
-          background: "linear-gradient(90deg, #4285F4, #6B46C1)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
+          textAlign: "center",         
           padding: "4px 0",
+          marginBottom: "16px",
+          color: "#ff9800",
         }}
       >
         AI Team Builder
-      </h2>
+      </div>
 
       <div style={{ marginBottom: "24px" }}>
         <label
           style={{
             display: "block",
             marginBottom: "8px",
-            fontSize: "14px",
+            fontSize: "18px",
             color: "#aaa",
           }}
         >
@@ -125,7 +123,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                 padding: "10px 12px",
                 borderRadius: "8px",
                 border: "none",
-                fontSize: "14px",
+                fontSize: "18px",
                 fontWeight: "500",
                 backgroundColor:
                   selectedModel === model
@@ -146,6 +144,26 @@ const AgentsForm = ({ agents, setAgents }) => {
         </div>
       </div>
 
+      {agents.length === 0 && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            fontSize: "18px",
+            color: "#aaa",
+          }}
+        >
+          <span style={{ fontSize: "24px", fontWeight: "600" }}>
+            No agents added yet.
+          </span>
+          <span style={{ marginLeft: "8px" }}>
+            Start by seklecting a role below.
+          </span>
+        </div>
+      )}
+
       {agents.length > 0 && (
         <div style={{ marginBottom: "24px" }}>
           <div
@@ -158,7 +176,7 @@ const AgentsForm = ({ agents, setAgents }) => {
           >
             <h3
               style={{
-                fontSize: "16px",
+                fontSize: "18px",
                 fontWeight: "600",
                 color: "#eee",
               }}
@@ -174,7 +192,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                 color: "#fff",
                 borderRadius: "6px",
                 cursor: "pointer",
-                fontSize: "13px",
+                fontSize: "18px",
                 fontWeight: "500",
                 transition: "all 0.2s ease",
                 display: "flex",
@@ -219,7 +237,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                 <span
                   style={{
                     flex: "1",
-                    fontSize: "14px",
+                    fontSize: "18px",
                     fontWeight: "500",
                   }}
                 >
@@ -236,9 +254,10 @@ const AgentsForm = ({ agents, setAgents }) => {
                       padding: "6px 10px",
                       borderRadius: "6px",
                       border: "1px solid rgba(255, 255, 255, 0.1)",
-                      fontSize: "13px",
+                      fontSize: "18px",
                       backgroundColor: "rgba(0, 0, 0, 0.2)",
                       color: modelColors[agent.model],
+                      backgroundColor: "black",
                       cursor: "pointer",
                       fontWeight: "500",
                     }}
@@ -263,7 +282,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                       backgroundColor: "rgba(255, 69, 58, 0.1)",
                       color: "#ff4545",
                       cursor: "pointer",
-                      fontSize: "14px",
+                      fontSize: "18px",
                     }}
                   >
                     ×
@@ -280,7 +299,7 @@ const AgentsForm = ({ agents, setAgents }) => {
           style={{
             display: "block",
             marginBottom: "8px",
-            fontSize: "14px",
+            fontSize: "18px",
             color: "#aaa",
           }}
         >
@@ -336,7 +355,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                 padding: "12px",
                 backgroundColor: "transparent",
                 color: "#fff",
-                fontSize: "14px",
+                fontSize: "18px",
                 border: "none",
                 outline: "none",
               }}
@@ -367,7 +386,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                   style={{
                     padding: "10px 12px",
                     cursor: "pointer",
-                    fontSize: "14px",
+                    fontSize: "18px",
                     transition: "background-color 0.2s ease",
                     backgroundColor: agents.some((a) => a.role === role)
                       ? "rgba(255, 255, 255, 0.05)"
@@ -430,7 +449,7 @@ const AgentsForm = ({ agents, setAgents }) => {
                 padding: "8px 12px",
                 borderRadius: "6px",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
-                fontSize: "13px",
+                fontSize: "18px",
                 backgroundColor: agents.some((agent) => agent.role === role)
                   ? "rgba(255, 255, 255, 0.02)"
                   : "rgba(255, 255, 255, 0.06)",
