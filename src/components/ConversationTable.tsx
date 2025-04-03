@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
-// Clean CSS styles without Tailwind
+// Clean CSS styles with responsive adjustments
 const styles = {
   container: {
     fontFamily:
@@ -33,6 +33,7 @@ const styles = {
   },
   conversationWrapper: {
     display: "flex",
+    flexDirection: "row",
     gap: "20px",
   },
   sidebar: {
@@ -158,6 +159,7 @@ const styles = {
     display: "flex",
     alignItems: "baseline",
     marginBottom: "6px",
+    flexWrap: "wrap",
   },
   messageName: {
     fontWeight: "600",
@@ -181,10 +183,12 @@ const styles = {
   },
   messageFooter: {
     display: "flex",
+    flexWrap: "wrap",
     alignItems: "center",
     padding: "12px 20px",
     backgroundColor: "#111",
     borderTop: "1px solid #333",
+    gap: "10px",
   },
   messageCount: {
     fontSize: "13px",
@@ -193,6 +197,7 @@ const styles = {
   },
   buttonGroup: {
     display: "flex",
+    flexWrap: "wrap",
     gap: "8px",
   },
   buttonPrimary: {
@@ -255,16 +260,114 @@ const styles = {
     fontSize: "13px",
     color: "#6b7280",
   },
+  mobileToggle: {
+    display: "none",
+    background: "#3b82f6",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    padding: "8px 12px",
+    margin: "0 0 10px 0",
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+  // Media queries for responsiveness
+  '@media (max-width: 768px)': {
+    conversationWrapper: {
+      flexDirection: "column",
+    },
+    sidebar: {
+      width: "100%",
+      marginBottom: "20px",
+    },
+    messageFooter: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+    },
+    messageCount: {
+      marginBottom: "10px",
+    },
+    buttonGroup: {
+      width: "100%",
+      justifyContent: "center",
+    },
+    mobileToggle: {
+      display: "block",
+    },
+    messageList: {
+      height: "400px",
+    },
+  },
+  '@media (max-width: 480px)': {
+    header: {
+      padding: "15px",
+    },
+    headerTitle: {
+      fontSize: "20px",
+    },
+    headerSubtitle: {
+      fontSize: "16px",
+    },
+    messageList: {
+      padding: "15px",
+      height: "350px",
+    },
+    messageContent: {
+      marginLeft: "12px",
+    },
+    messageText: {
+      fontSize: "16px",
+    },
+    tab: {
+      padding: "10px 12px",
+      fontSize: "16px",
+    },
+    buttonPrimary: {
+      fontSize: "16px",
+      padding: "8px 12px",
+    },
+    buttonSecondary: {
+      fontSize: "16px",
+      padding: "8px 12px",
+    },
+  }
 };
 
-const ConversationUI = ({ data,summary }) => {
+const ConversationUI = ({ data, summary }) => {
   const [activeTab, setActiveTab] = useState("conversation");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentSpeakingIndex, setCurrentSpeakingIndex] = useState(-1);
   const [highlightedWords, setHighlightedWords] = useState([]);
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
   // Reference to store speech synthesis utterances
   const utteranceRef = useRef(null);
+
+  // Track window resize for responsive layout
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      // Auto-hide sidebar on small screens
+      if (window.innerWidth <= 768) {
+        setShowSidebar(false);
+      } else {
+        setShowSidebar(true);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      // Initial call
+      handleResize();
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
+  }, []);
 
   // Get unique roles
   const uniqueRoles = [...new Set(data.map((item) => item.agent))];
@@ -586,72 +689,103 @@ const ConversationUI = ({ data,summary }) => {
     win.close();
   };
 
+  // Apply responsive styles based on current window width
+  const getResponsiveStyle = (baseStyle, styleName) => {
+    const responsiveStyle = { ...baseStyle };
+    
+    // Apply media query styles based on window width
+    if (windowWidth <= 768 && styles['@media (max-width: 768px)'][styleName]) {
+      Object.assign(responsiveStyle, styles['@media (max-width: 768px)'][styleName]);
+    }
+    
+    if (windowWidth <= 480 && styles['@media (max-width: 480px)'][styleName]) {
+      Object.assign(responsiveStyle, styles['@media (max-width: 480px)'][styleName]);
+    }
+    
+    return responsiveStyle;
+  };
+
   return (
-    <div style={styles.container}>
+    <div style={getResponsiveStyle(styles.container, 'container')}>
       {/* Header */}
-      <header style={styles.header}>
-        <h1 style={styles.headerTitle}>Team Conversation</h1>
-        <p style={styles.headerSubtitle}>
+      <header style={getResponsiveStyle(styles.header, 'header')}>
+        <h1 style={getResponsiveStyle(styles.headerTitle, 'headerTitle')}>Team Conversation</h1>
+        <p style={getResponsiveStyle(styles.headerSubtitle, 'headerSubtitle')}>
           Collaborative discussion between team members
         </p>
       </header>
 
-      {/* Main content */}
-      <div style={styles.conversationWrapper}>
-        {/* Sidebar with team members */}
-        <aside style={styles.sidebar}>
-          <div style={styles.teamPanel}>
-            <h2 style={styles.panelTitle}>
-              <svg
-                style={styles.panelIcon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-              Team Members
-            </h2>
+      {/* Mobile sidebar toggle button */}
+      {windowWidth <= 768 && (
+        <button 
+          style={getResponsiveStyle(styles.mobileToggle, 'mobileToggle')}
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          {showSidebar ? "Hide Team Members" : "Show Team Members"}
+        </button>
+      )}
 
-            <ul style={styles.memberList}>
-              {uniqueRoles.map((role) => (
-                <li key={role} style={styles.memberItem}>
-                  <div
-                    style={{
-                      ...styles.memberAvatar,
-                      backgroundColor: roleInfo[role]?.color??"#9ca3af",
-                      opacity:
-                        currentSpeakingIndex >= 0 &&
-                        data[currentSpeakingIndex]?.agent === role
-                          ? 1
-                          : 0.7,
-                    }}
-                  >
-                    {roleInfo[role]?.avatar??'🙍🏻‍♂️'}
-                  </div>
-                  <div style={styles.memberInfo}>
-                    <h3 style={styles.memberName}>{role}</h3>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+      {/* Main content */}
+      <div style={getResponsiveStyle(styles.conversationWrapper, 'conversationWrapper')}>
+        {/* Sidebar with team members */}
+        {showSidebar && (
+          <aside style={getResponsiveStyle(styles.sidebar, 'sidebar')}>
+            <div style={styles.teamPanel}>
+              <h2 style={styles.panelTitle}>
+                <svg
+                  style={styles.panelIcon}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                  />
+                </svg>
+                Team Members
+              </h2>
+
+              <ul style={styles.memberList}>
+                {uniqueRoles.map((role) => (
+                  <li key={role} style={styles.memberItem} onClick={() => {
+                    console.log(`Clicked on ${role}`);
+                    
+                  }}>
+                    <div
+                      style={{
+                        ...styles.memberAvatar,
+                        backgroundColor: roleInfo[role]?.color??"#9ca3af",
+                        opacity:
+                          currentSpeakingIndex >= 0 &&
+                          data[currentSpeakingIndex]?.agent === role
+                            ? 1
+                            : 0.7,
+                      }}
+                    >
+                      {roleInfo[role]?.avatar??'🙍🏻‍♂️'}
+                    </div>
+                    <div style={styles.memberInfo}>
+                      <h3 style={styles.memberName}>{role}</h3>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        )}
 
         {/* Main content area */}
-        <div style={styles.mainContent}>
+        <div style={getResponsiveStyle(styles.mainContent, 'mainContent')}>
           {/* Tabs */}
-          <div style={styles.tabBar}>
+          <div style={getResponsiveStyle(styles.tabBar, 'tabBar')}>
             <button
               onClick={() => setActiveTab("conversation")}
               style={{
-                ...styles.tab,
+                ...getResponsiveStyle(styles.tab, 'tab'),
                 ...(activeTab === "conversation" ? styles.activeTab : {}),
               }}
             >
@@ -660,17 +794,18 @@ const ConversationUI = ({ data,summary }) => {
             <button
               onClick={() => setActiveTab("summary")}
               style={{
-                ...styles.tab,
+                ...getResponsiveStyle(styles.tab, 'tab'),
                 ...(activeTab === "summary" ? styles.activeTab : {}),
               }}
             >
               Summary
             </button>
           </div>
+          
           {/* Footer controls */}
-          <div style={styles.messageFooter}>
+          <div style={getResponsiveStyle(styles.messageFooter, 'messageFooter')}>
             <span style={styles.messageCount}>{data.length} messages</span>
-            <div style={styles.buttonGroup}>
+            <div style={getResponsiveStyle(styles.buttonGroup, 'buttonGroup')}>
               <button
                 type="button"
                 onClick={toggleConversation}
@@ -678,10 +813,10 @@ const ConversationUI = ({ data,summary }) => {
                   backgroundColor: isSpeaking ? "#f44336" : "#ff9800",
                   color: "#fff",
                   border: "none",
-                  padding: "8px",
+                  padding: windowWidth <= 480 ? "6px 10px" : "8px",
                   borderRadius: "6px",
                   cursor: "pointer",
-                  fontSize: "18px",
+                  fontSize: windowWidth <= 480 ? "16px" : "18px",
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
@@ -710,7 +845,7 @@ const ConversationUI = ({ data,summary }) => {
                     >
                       <polygon points="5,3 19,12 5,21" />
                     </svg>
-                    Start Conversation
+                    {windowWidth <= 480 ? "Start" : "Start Conversation"}
                   </>
                 )}
               </button>
@@ -720,10 +855,10 @@ const ConversationUI = ({ data,summary }) => {
                     backgroundColor: "green",
                     color: "white",
                     border: "none",
-                    padding: "8px",
+                    padding: windowWidth <= 480 ? "6px 10px" : "8px",
                     borderRadius: "6px",
                     cursor: "pointer",
-                    marginRight: "8px",
+                    fontSize: windowWidth <= 480 ? "16px" : "18px",
                   }}
                   onClick={() => {
                     // Cancel current speech
@@ -748,8 +883,8 @@ const ConversationUI = ({ data,summary }) => {
                   Next
                 </button>
               )}
-              <button onClick={handlePrint} style={styles.buttonSecondary}>
-                Print Page
+              <button onClick={handlePrint} style={getResponsiveStyle(styles.buttonSecondary, 'buttonSecondary')}>
+                {windowWidth <= 480 ? "Print" : "Print Page"}
               </button>
 
               <button
@@ -757,7 +892,7 @@ const ConversationUI = ({ data,summary }) => {
                   navigator.clipboard.writeText(printRef.current.innerText);
                   alert("Conversation copied to clipboard!");
                 }}
-                style={styles.buttonPrimary}
+                style={getResponsiveStyle(styles.buttonPrimary, 'buttonPrimary')}
               >
                 Copy
               </button>
@@ -768,12 +903,12 @@ const ConversationUI = ({ data,summary }) => {
           {activeTab === "conversation" && (
             <div style={styles.messagesContainer}>
               {/* Messages */}
-              <div ref={printRef} style={styles.messageList}>
+              <div ref={printRef} style={getResponsiveStyle(styles.messageList, 'messageList')}>
                 {data.map((message, index) => (
                   <div
                     key={index}
                     style={{
-                      ...styles.messageItem,
+                      ...getResponsiveStyle(styles.messageItem, 'messageItem'),
                       backgroundColor:
                         currentSpeakingIndex === index
                           ? `${roleInfo[message.agent]?.color}10`
@@ -783,19 +918,21 @@ const ConversationUI = ({ data,summary }) => {
                           ? `4px solid ${roleInfo[message.agent]?.color}`
                           : "none",
                       paddingLeft:
-                        currentSpeakingIndex === index ? "12px" : "16px",
+                        currentSpeakingIndex === index ? "12px" : (windowWidth <= 480 ? "8px" : "16px"),
                       transition: "all 0.3s ease",
                     }}
                   >
                     <div
                       style={{
-                        ...styles.messageAvatar,
+                        ...getResponsiveStyle(styles.messageAvatar, 'messageAvatar'),
                         backgroundColor: roleInfo[message.agent]?.color??"#9ca3af",
                         transform:
                           currentSpeakingIndex === index
                             ? "scale(1.1)"
                             : "scale(1)",
                         transition: "transform 0.3s ease",
+                        width: windowWidth <= 480 ? "32px" : "40px",
+                        height: windowWidth <= 480 ? "32px" : "40px",
                       }}
                     >
                       {roleInfo[message.agent]?.avatar??'🙍🏻‍♂️'}

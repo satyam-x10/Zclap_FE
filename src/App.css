@@ -39,3 +39,45 @@
 .read-the-docs {
   color: #888;
 }
+
+
+@media screen and (max-width: 768px) {
+  .product-form-container {
+    padding: 10px !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  .product-form-container form {
+    gap: 12px !important;
+  }
+
+  .product-form-container input,
+  .product-form-container textarea {
+    font-size: 16px !important;
+  }
+
+  .product-form-container button {
+    font-size: 16px !important;
+    padding: 6px 8px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .top-navbar {
+    flex-direction: column !important;
+    gap: 6px;
+    padding: 10px 10px !important;
+  }
+
+  .top-navbar li,
+  .top-navbar h2 {
+    font-size: 18px !important;
+    text-align: center;
+    word-wrap: break-word;
+  }
+
+  .top-navbar li:first-child {
+    font-size: 20px !important;
+  }
+}

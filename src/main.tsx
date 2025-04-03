@@ -7,45 +7,66 @@ import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <div style={{ backgroundColor: "#000" ,position: "fixed", top: 0, left: 0, right: 0 ,color:'rgb(153 178 206)',padding:'10px 30px',zIndex: 1000 }}>
-      <ul
+    <nav
+      style={{
+        backgroundColor: "#000",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        color: "rgb(153 178 206)",
+        padding: "10px 16px",
+        zIndex: 1000,
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.5)"
+      }}
+    >
+      <div
+        className="top-navbar"
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          listStyle: "none",
-          padding: "5px 16px",
+          padding: "8px 0",
           margin: 0,
-          textDecoration: "none",
-          marginBottom: "25px",
+          maxWidth: "1200px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          width: "100%"
         }}
       >
-        <li
+        <div
           onClick={() => window.location.reload()}
           style={{
-            fontSize: "26px",
+            fontSize: "22px",
             fontWeight: "bold",
             cursor: "pointer",
+            padding: "8px 12px",
+            borderRadius: "6px",
+            transition: "background-color 0.3s",
+            userSelect: "none"
           }}
+          onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#111"}
+          onMouseOut={(e) => e.currentTarget.style.backgroundColor = "transparent"}
         >
           Home
-        </li>
-        <li
+        </div>
+        <h1
           style={{
+            fontSize: "22px",
             margin: 0,
+            fontWeight: "bold",
+            padding: "0 10px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis"
           }}
         >
-          <h2
-            style={{
-              fontSize: "26px",
-              margin: 0,
-            }}
-          >
-            Multi-Agent Marketing Campaign Simulation
-          </h2>
-        </li>
-      </ul>
+          Multi-Agent Marketing Campaign Simulation
+        </h1>
+      </div>
+    </nav>
+    <div style={{ paddingTop: "70px" }}>
+      <App />
     </div>
-    <App />
-  </StrictMode>,
+  </StrictMode>
 );

@@ -193,48 +193,50 @@ function App() {
       ) : (
         <div>
           <>
-          <div style={{ fontSize: "22px", fontWeight: "bold", textAlign: "left",marginLeft: "30px"}}>
-  Please make sure that you have filled product and agents data carefully.
-</div>
+  
 
-          </>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              // width: "100vw",
-              // height: '100%',
-              gap: "20px",
-              padding: "10px",
-              boxSizing: "border-box",
-              backgroundColor: "#000",
-            }}
-          >
-            <div
-              style={{
-                width: "40%",
-                maxHeight: "65vh",
-                minHeight: "65vh",
-                overflowY: "scroll",
-              }}
-            >
-              <ProductForm product={product} setProduct={setProduct} />
-            </div>
-            <div
-              style={{
-                width: "60%",
-                maxHeight: "65vh",
-                minHeight: "65vh",
-                overflowY: "scroll",
-              }}
-            >
-              <AgentsForm agents={agents} setAgents={setAgents} />
-            </div>
-            {/* <button onClick={handleGenerateContent}>
-          Generate Content
-        </button> */}
-          </div>
-
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: "20px",
+      padding: "10px",
+      boxSizing: "border-box",
+      backgroundColor: "#000",
+      flexWrap: "wrap",
+      width: "100%"
+    }}
+  >
+    <div
+      style={{
+        width: "calc(100% - 20px)",
+        maxWidth: "1200px",
+        maxHeight: "65vh",
+        minHeight: "65vh",
+        overflowY: "scroll",
+        flex: "1 1 300px",
+        minWidth: "300px",
+        margin: "0 auto"
+      }}
+    >
+      <ProductForm product={product} setProduct={setProduct} />
+    </div>
+    <div
+      style={{
+        width: "calc(100% - 20px)",
+        maxWidth: "1200px",
+        maxHeight: "65vh",
+        minHeight: "65vh",
+        overflowY: "scroll",
+        flex: "1 1 300px",
+        minWidth: "300px",
+        margin: "0 auto"
+      }}
+    >
+      <AgentsForm agents={agents} setAgents={setAgents} />
+    </div>
+  </div>
+</>
           <button
             onClick={handleGenerateContent}
             style={{

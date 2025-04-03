@@ -25,21 +25,21 @@ const ProductForm = ({ product, setProduct }) => {
 
   return (
     <div
-  style={{
-    backgroundColor: "#222",
-    color: "#fff",
-    padding: "5px",
-    borderRadius: "10px",
-    margin: "5px ",
-    fontFamily: "Poppins, sans-serif",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    overflowY: "auto",
-    minHeight: "60vh",
-    maxHeight: "80vh",
-
-    // Hiding scrollbar (inline for WebKit browsers)
-    scrollbarWidth: "none", // Firefox
-    msOverflowStyle: "none", // IE 10+
+    className="product-form-container"
+    style={{
+      backgroundColor: "#222",
+      color: "#fff",
+      padding: "5px",
+      borderRadius: "10px",
+      margin: "5px ",
+      fontFamily: "Poppins, sans-serif",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      overflowY: "auto",
+      minHeight: "60vh",
+      maxHeight: "80vh",
+      scrollbarWidth: "none", // Firefox
+      msOverflowStyle: "none", // IE 10+
+    
   }}
   ref={(el) => {
     if (el) {
